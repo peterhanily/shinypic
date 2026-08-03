@@ -1,0 +1,32 @@
+{
+  "name": "shinypic",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A private, local-first HDR shine editor with static and standalone builds.",
+  "homepage": "https://shinypic.pages.dev/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peterhanily/shinypic.git"
+  },
+  "author": "CaddyLabs",
+  "license": "MIT",
+  "keywords": [
+    "hdr",
+    "rec2100",
+    "pq",
+    "photo-editor",
+    "local-first",
+    "pwa"
+  ],
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs",
+    "build": "node scripts/build-static.mjs",
+    "build:single": "node scripts/build-standalone.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

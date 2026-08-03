@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title description">
+  <title id="title">Chainlink symbol case study</title>
+  <desc id="description">The official white Chainlink symbol with clear space on a Chainlink Blue background.</desc>
+  <rect width="1200" height="900" fill="#0847F7"/>
+  <path d="M600 278 476.5 348.973v141.945L600 561.89l123.5-70.972V348.973L600 278Zm71.179 182.837L600.023 501.728l-71.157-40.891v-81.783l71.157-40.892 71.156 40.892v81.783Z" fill="#fff"/>
+</svg>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f3ea">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Turn the brightest details in a photo into real HDR highlights. Private, local and delightfully simple.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ShinyPic">
+  <meta property="og:title" content="ShinyPic — make a photo shine">
+  <meta property="og:description" content="A private, one-page studio for real Rec.2100 PQ HDR highlights.">
+  <meta property="og:url" content="https://shinypic.pages.dev/">
+  <meta property="og:image" content="https://shinypic.pages.dev/assets/social-card.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The ShinyPic editor lighting up reflections on a rainy street">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ShinyPic">
+  <title>ShinyPic — make a photo shine</title>
+  <link rel="canonical" href="https://shinypic.pages.dev/">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#editorControls">Skip to editing controls</a>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <a class="brand" href="./" aria-label="ShinyPic home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none">
+            <path d="M22 2.5v8M22 33.5v8M2.5 22h8M33.5 22h8M8.2 8.2l5.6 5.6M30.2 30.2l5.6 5.6M35.8 8.2l-5.6 5.6M13.8 30.2l-5.6 5.6" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
+            <circle cx="22" cy="22" r="8.5" fill="currentColor"/>
+            <circle cx="19" cy="19" r="2.3" fill="#fffdf8"/>
+          </svg>
+        </span>
+        <span class="brand-name">ShinyPic</span>
+        <span class="brand-tagline">tiny HDR studio</span>
+      </a>
+
+      <div class="header-actions">
+        <span class="local-pill"><i aria-hidden="true"></i><span>Your photo stays here</span></span>
+        <a class="header-link" href="https://caddylabs.io/" target="_blank" rel="noreferrer" aria-label="Visit CaddyLabs">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v5.2l-5 8.2A2.4 2.4 0 0 0 7.1 20h9.8a2.4 2.4 0 0 0 2.1-3.6l-5-8.2V3M7.2 14h9.6"/></svg>
+          <span>CaddyLabs</span>
+        </a>
+        <a class="header-link" href="https://github.com/peterhanily/shinypic" target="_blank" rel="noreferrer" aria-label="View ShinyPic source code on GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 7-5 5 5 5M15.5 7l5 5-5 5M13.5 4l-3 16"/></svg>
+          <span>Source</span>
+        </a>
+        <button class="round-button" type="button" id="aboutButton" aria-label="How ShinyPic works" title="How ShinyPic works">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 10.6v5.2M12 7.4h.01"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace" id="main">
+      <section class="preview-pane" aria-label="Photo preview">
+        <div class="preview-topbar">
+          <div class="file-summary">
+            <span class="file-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4.5 7.5h15v11h-15zM7.5 7.5l1.6-2h5.8l1.6 2M8 15l2.4-2.6 2.1 2 1.6-1.4 2.3 2"/></svg>
+            </span>
+            <span class="file-copy">
+              <strong id="fileName">neon-rain-demo.jpg</strong>
+              <small id="fileDetails">Sample · 1600 × 1066</small>
+            </span>
+          </div>
+
+          <div class="topbar-actions">
+            <label class="quiet-button" for="photoInput">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 12.8V3m0 0L6.6 6.4M10 3l3.4 3.4M4 11.5v4.2c0 .7.6 1.3 1.3 1.3h9.4c.7 0 1.3-.6 1.3-1.3v-4.2"/></svg>
+              <span>New photo</span>
+            </label>
+            <input class="visually-hidden" id="photoInput" type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.avif,.heic,.heif">
+          </div>
+        </div>
+
+        <div class="preview-frame" id="dropZone">
+          <div class="preview-stage" id="previewStage" role="group" tabindex="-1" aria-label="Photo preview. Choose Tap to position a highlight with the arrow keys.">
+            <img class="preview-image preview-image--original" id="originalImage" src="./assets/demos/neon-rain.jpg" alt="Original sample photo">
+            <div class="result-layer" id="resultLayer">
+              <img class="preview-image preview-image--result" id="resultImage" src="./assets/demos/neon-rain.jpg" alt="Shiny sample photo">
+            </div>
+            <img class="mask-preview" id="maskPreview" alt="The selected shine area" hidden>
+            <canvas class="paint-canvas" id="paintCanvas" tabindex="-1" aria-label="Paint the area that should shine. Arrow keys move the brush and Space paints." aria-describedby="selectionHelp" hidden></canvas>
+            <span class="spot-marker" id="spotMarker" aria-hidden="true" hidden><i></i></span>
+
+            <div class="stage-status">
+              <button class="capability-pill" type="button" id="hdrStatusButton" aria-describedby="previewHint">
+                <i aria-hidden="true"></i>
+                <span id="hdrStatusLabel">Checking HDR…</span>
+              </button>
+              <span class="selection-pill" id="selectionCoverage">Finding highlights…</span>
+            </div>
+
+            <div class="normal-white-reference" title="This square is ordinary interface white">
+              <i aria-hidden="true"></i>
+              <span>normal<br>white</span>
+            </div>
+
+            <div class="compare-line" id="compareLine" aria-hidden="true"><span>↔</span></div>
+            <input class="compare-range" id="compareRange" type="range" min="0" max="100" value="0" aria-label="Slide between shiny and original">
+
+            <div class="stage-bottom">
+              <div class="before-after" role="group" aria-label="Preview version">
+                <button type="button" id="showAfterButton" class="is-active">Shiny</button>
+                <button type="button" id="showBeforeButton">Original</button>
+              </div>
+              <button class="mask-button" type="button" id="maskToggle" aria-pressed="false">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 10s2.8-4.6 7.5-4.6 7.5 4.6 7.5 4.6-2.8 4.6-7.5 4.6S2.5 10 2.5 10Z"/><circle cx="10" cy="10" r="2.2"/></svg>
+                <span>Shine map</span>
+              </button>
+            </div>
+
+            <div class="drop-overlay" id="dropOverlay" aria-hidden="true">
+              <span aria-hidden="true">✦</span>
+              <strong>Drop it here</strong>
+              <small>Your photo stays on this device</small>
+            </div>
+          </div>
+        </div>
+
+        <p class="preview-hint" id="previewHint">The sample uses a simulated glow while we check this screen.</p>
+      </section>
+
+      <aside class="controls-pane" id="editorControls" aria-label="Shine controls">
+        <div class="controls-scroll">
+          <div class="controls-intro">
+            <div>
+              <p class="eyebrow"><span aria-hidden="true">✦</span> Make it shine</p>
+              <h1>Light up the good bits.</h1>
+            </div>
+            <button class="reset-button" type="button" id="resetButton" title="Reset edits">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.2 6.7A6.5 6.5 0 1 1 3.8 13M4.2 6.7V2.8M4.2 6.7h3.9"/></svg>
+              <span>Reset</span>
+            </button>
+          </div>
+
+          <section class="control-section control-section--first" aria-labelledby="photoHeading">
+            <div class="section-heading">
+              <span class="step-number">1</span>
+              <div><h2 id="photoHeading">Pick a photo</h2><p>or tap a sample made for tiny highlights</p></div>
+            </div>
+            <div class="photo-actions">
+              <label class="photo-button photo-button--primary" for="photoInput">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 7.5h15v11h-15zM7.5 7.5l1.6-2h5.8l1.6 2M8 15l2.4-2.6 2.1 2 1.6-1.4 2.3 2"/></svg>
+                <span><strong>Choose photo</strong><small>JPG, PNG, WebP, HEIC*</small></span>
+              </label>
+              <label class="photo-button photo-button--camera" for="cameraInput">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h16v11H4zM8 7.5l1.4-2h5.2l1.4 2"/><circle cx="12" cy="13" r="3.2"/></svg>
+                <span><strong>Take photo</strong><small>Use your camera</small></span>
+              </label>
+              <input class="visually-hidden" id="cameraInput" type="file" accept="image/*" capture="environment">
+            </div>
+            <div class="sample-picker-heading"><span>Try a sample</span><small>Each starts with a tuned recipe</small></div>
+            <div class="demo-rail" id="demoRail" role="group" aria-label="Try a sample image"></div>
+            <p class="local-note"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="8.5" width="12" height="8" rx="2"/><path d="M7 8.5V6.4a3 3 0 0 1 6 0v2.1"/></svg><span><strong>Private by design.</strong> No upload, account or tracking.</span></p>
+          </section>
+
+          <section class="control-section" aria-labelledby="selectHeading">
+            <div class="section-heading">
+              <span class="step-number">2</span>
+              <div><h2 id="selectHeading">Choose what shines</h2><p id="selectionHelp">Magic finds the brightest details for you.</p></div>
+            </div>
+            <div class="mode-grid" role="group" aria-label="Selection method">
+              <button class="mode-card is-active" type="button" data-selection="lights" aria-pressed="true">
+                <span class="mode-icon mode-icon--magic" aria-hidden="true">✦</span>
+                <strong>Magic</strong>
+                <small>bright bits</small>
+              </button>
+              <button class="mode-card" type="button" data-selection="spot" aria-pressed="false">
+                <span class="mode-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/></svg>
+                </span>
+                <strong>Tap</strong>
+                <small>one place</small>
+              </button>
+              <button class="mode-card" type="button" data-selection="paint" aria-pressed="false">
+                <span class="mode-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17.5c-2.6.2-3.4 1.3-3.6 3.1 2.6.2 4.7-.3 5.2-2.3M8.2 16.8l8.7-11.3c.7-.9 2-.9 2.8-.1.8.8.8 2.1-.1 2.8L8.2 16.8Z"/></svg>
+                </span>
+                <strong>Paint</strong>
+                <small>your choice</small>
+              </button>
+            </div>
+
+            <div class="brush-tools" id="brushTools" hidden>
+              <div class="brush-row">
+                <div class="mini-segment" role="group" aria-label="Brush mode">
+                  <button type="button" class="is-active" data-brush-mode="add">Add</button>
+                  <button type="button" data-brush-mode="erase">Erase</button>
+                </div>
+                <button class="tool-button" type="button" id="undoPaint" disabled>
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.2 5.2 3.5 8.4l3.7 3.2M4 8.4h7.2a4.5 4.5 0 0 1 4.5 4.5v1.5"/></svg>Undo
+                </button>
+                <button class="tool-button" type="button" id="clearPaint">Clear</button>
+              </div>
+              <label class="compact-range"><span>Brush size</span><input id="brushSize" type="range" min="24" max="140" value="64"><output id="brushSizeValue">64</output></label>
+            </div>
+          </section>
+
+          <section class="control-section" aria-labelledby="lookHeading">
+            <div class="section-heading">
+              <span class="step-number">3</span>
+              <div><h2 id="lookHeading">Pick a vibe</h2><p>Start with a recipe, then make it yours.</p></div>
+            </div>
+            <div class="recipe-row" role="group" aria-label="Shine recipes">
+              <button class="recipe-card is-active" type="button" data-recipe="clean" aria-pressed="true"><i class="recipe-art recipe-art--clean" aria-hidden="true">✦</i><span><strong>Clean</strong><small>crisp white</small></span></button>
+              <button class="recipe-card" type="button" data-recipe="sparkle" aria-pressed="false"><i class="recipe-art recipe-art--sparkle" aria-hidden="true">✦</i><span><strong>Sparkle</strong><small>tiny + bright</small></span></button>
+              <button class="recipe-card" type="button" data-recipe="dream" aria-pressed="false"><i class="recipe-art recipe-art--dream" aria-hidden="true">✦</i><span><strong>Dream</strong><small>soft bloom</small></span></button>
+              <button class="recipe-card" type="button" data-recipe="neon" aria-pressed="false"><i class="recipe-art recipe-art--neon" aria-hidden="true">✦</i><span><strong>Neon</strong><small>electric colour</small></span></button>
+            </div>
+
+            <div class="color-row">
+              <span class="small-label">Light colour</span>
+              <div class="swatches" role="group" aria-label="Shine colour">
+                <button class="color-swatch color-swatch--pearl is-active" type="button" data-color="#ffffff" data-name="Pearl" aria-label="Pearl white" aria-pressed="true"></button>
+                <button class="color-swatch color-swatch--gold" type="button" data-color="#ffd27a" data-name="Gold" aria-label="Gold" aria-pressed="false"></button>
+                <button class="color-swatch color-swatch--ice" type="button" data-color="#96ddff" data-name="Ice" aria-label="Ice blue" aria-pressed="false"></button>
+                <button class="color-swatch color-swatch--pink" type="button" data-color="#ff79d9" data-name="Pink" aria-label="Neon pink" aria-pressed="false"></button>
+                <button class="color-swatch color-swatch--lime" type="button" data-color="#b8ff72" data-name="Lime" aria-label="Lime" aria-pressed="false"></button>
+                <label class="color-swatch color-swatch--custom" aria-label="Custom colour" title="Custom colour">
+                  <input id="customColor" type="color" value="#7b66ff">
+                  <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M9 4v10M4 9h10"/></svg>
+                </label>
+              </div>
+              <span class="selected-color" id="selectedColorName">Pearl</span>
+            </div>
+
+            <div class="range-list">
+              <label class="range-control">
+                <span><strong>Brightness</strong><small>HDR peak</small></span>
+                <input id="shineAmount" type="range" min="0" max="100" value="78">
+                <output id="shineAmountValue">4,900 nits</output>
+              </label>
+              <label class="range-control" id="areaRangeControl">
+                <span><strong>Shine area</strong><small id="areaRangeHint">brightest pixels</small></span>
+                <input id="shineArea" type="range" min="0" max="100" value="30">
+                <output id="shineAreaValue">6%</output>
+              </label>
+              <label class="range-control">
+                <span><strong>Bloom</strong><small>edge softness</small></span>
+                <input id="shineBloom" type="range" min="0" max="100" value="42">
+                <output id="shineBloomValue">Soft</output>
+              </label>
+            </div>
+          </section>
+
+          <details class="truth-card" id="truthCard">
+            <summary><span class="truth-icon" aria-hidden="true">HDR</span><span><strong id="truthTitle">Checking this display</strong><small>How to know what you’re seeing</small></span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg></summary>
+            <div class="truth-body" id="truthMessage">We are checking whether this browser and display expose HDR headroom.</div>
+          </details>
+          <button class="story-link" type="button" id="storyButton"><span aria-hidden="true">✦</span><span><strong>Why can this be brighter than white?</strong><small>See the Chainlink image that started it.</small></span><span aria-hidden="true">→</span></button>
+        </div>
+
+        <div class="export-dock">
+          <div class="export-status">
+            <span class="ready-dot" id="readyDot" aria-hidden="true"></span>
+            <span><strong id="readyLabel">Preparing HDR…</strong><small id="exportMeta">Rec.2100 PQ · private · up to 4096px</small></span>
+          </div>
+          <div class="export-actions">
+            <a class="save-button" id="saveHdrButton" aria-disabled="true">
+              <svg viewBox="0 0 22 22" aria-hidden="true"><path d="M11 3v10m0 0 4-4m-4 4L7 9M4 16v2h14v-2"/></svg>
+              <span>Save HDR</span>
+            </a>
+            <button class="share-button" type="button" id="shareButton" disabled aria-label="Share finished photo">
+              <svg viewBox="0 0 22 22" aria-hidden="true"><path d="M11 14V3m0 0L7 7m4-4 4 4M4 11.5V18h14v-6.5"/></svg>
+              <span>Share</span>
+            </button>
+          </div>
+          <a class="sdr-link" id="saveSdrButton" aria-disabled="true">Need a copy that glows on every screen? <strong>Save SDR glow</strong></a>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <dialog class="about-dialog" id="aboutDialog" aria-labelledby="aboutTitle">
+    <button class="dialog-close" type="button" id="aboutClose" aria-label="Close">×</button>
+    <span class="dialog-spark" aria-hidden="true">✦</span>
+    <h2 id="aboutTitle">Real shine, honestly shown.</h2>
+    <p>ShinyPic makes a Rec.2100 PQ JPEG whose selected pixels can rise above ordinary white on a compatible HDR display.</p>
+    <div class="dialog-facts">
+      <p><strong>Nothing is uploaded.</strong><span>Editing and export happen in your browser.</span></p>
+      <p><strong>HDR varies by screen.</strong><span>We label simulated previews and include the white reference square.</span></p>
+      <p><strong>Two useful files.</strong><span>Save real HDR, or an SDR glow copy for apps that flatten HDR.</span></p>
+    </div>
+    <section class="origin-story" aria-labelledby="originTitle">
+      <div class="origin-copy">
+        <p class="eyebrow"><span aria-hidden="true">✦</span> The origin story</p>
+        <h3 id="originTitle">A blue logo that looked impossibly bright.</h3>
+        <p>The original Chainlink graphic was not animated and did not rely on CSS blur. Its JPEG carried a Rec.2020 PQ profile, so the white line work represented thousands of nominal nits while the blue stayed comparatively dim.</p>
+        <p>ShinyPic recreates that idea: it finds a small mask, converts sRGB into linear light and Rec.2020, maps the selected pixels to 700–6,800 nominal nits, PQ-encodes them, and embeds the Rec.2100 profile in the saved JPEG.</p>
+      </div>
+      <figure class="origin-figure">
+        <div class="origin-image-wrap"><img id="chainlinkStoryImage" alt="Official white Chainlink symbol on a blue background"><span>Try it in the sample rail</span></div>
+        <figcaption>Official Chainlink mark shown for an unaffiliated technical case study. The licensed third-party raster that inspired the project is not redistributed.</figcaption>
+      </figure>
+      <ol class="mini-pipeline" aria-label="HDR conversion steps">
+        <li><span>1</span><strong>Select</strong><small>bright pixels</small></li>
+        <li><span>2</span><strong>Convert</strong><small>linear Rec.2020</small></li>
+        <li><span>3</span><strong>Boost</strong><small>target nits</small></li>
+        <li><span>4</span><strong>Encode</strong><small>PQ + ICC</small></li>
+        <li><span>5</span><strong>Display</strong><small>HDR headroom</small></li>
+      </ol>
+    </section>
+    <div class="dialog-links">
+      <a href="https://caddylabs.io/" target="_blank" rel="noreferrer">Made by CaddyLabs ↗</a>
+      <a href="https://github.com/peterhanily/shinypic" target="_blank" rel="noreferrer">Download the source ↗</a>
+      <a href="https://chain.link/brand-assets" target="_blank" rel="noreferrer">Chainlink brand source ↗</a>
+    </div>
+    <button class="dialog-primary" type="button" id="aboutDone">Got it</button>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+    <span class="toast-icon" aria-hidden="true">✦</span>
+    <span><strong id="toastTitle"></strong><small id="toastMessage"></small></span>
+    <button type="button" id="toastClose" aria-label="Dismiss">×</button>
+  </div>
+</body>
+</html>

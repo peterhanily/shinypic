@@ -1,0 +1,56 @@
+# Dependencies and package-manager state
+node_modules/
+.npm/
+.pnpm-store/
+
+# Generated builds and test output
+dist/
+dist-single/
+coverage/
+playwright-report/
+test-results/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cloudflare and local runtime state
+.wrangler/
+.dev.vars
+.dev.vars.*
+.data/
+
+# Environment files and credentials
+.env
+.env.*
+!.env.example
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.mobileprovision
+credentials*.json
+service-account*.json
+
+# Keep private test media out of commits
+private/
+local-images/
+uploads/
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Temporary files
+.cache/
+.tmp/
+tmp/
+*.local

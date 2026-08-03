@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose a focused improvement that preserves local-first editing.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ShinyPic is intentionally local-first, dependency-light, mobile-friendly, and available as a standalone HTML file. Explain how the idea fits those constraints.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the user need rather than only a preferred implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed experience
+      description: Include a concise mobile flow when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Privacy and compatibility
+      options:
+        - label: The feature can work without uploading source images.
+          required: true
+        - label: The feature can work without analytics or third-party runtime scripts.
+          required: true
+        - label: I considered the standalone file:// build and mobile browsers.
+          required: true
+        - label: Any example media is safe and licensed for public redistribution.
+          required: true
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Security, memory, HDR, or accessibility trade-offs
+      description: Say “none identified” if you considered these and found none.
+    validations:
+      required: true

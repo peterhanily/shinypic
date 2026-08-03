@@ -1,0 +1,7 @@
+{
+  // Static Pages only: no Functions, bindings, account identifiers, or secrets.
+  "name": "shinypic",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-08-03",
+  "send_metrics": false
+}

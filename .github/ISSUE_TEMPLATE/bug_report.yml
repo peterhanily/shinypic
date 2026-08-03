@@ -1,0 +1,86 @@
+name: Bug report
+description: Report a reproducible ShinyPic problem using non-sensitive media.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve ShinyPic. **Do not attach a private original photo, credentials, tokens, or identifying metadata.** Reproduce with the included demo or a synthetic image. Report security issues privately using `SECURITY.md`.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: This is not a security vulnerability or private-data disclosure.
+          required: true
+        - label: Any attached media is safe and licensed for public redistribution.
+          required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: How did you run ShinyPic?
+      options:
+        - Live hosted site
+        - Local static server
+        - Standalone file:// build
+        - Installed PWA
+        - Other fork or deployment
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use the built-in demo or describe a synthetic test image.
+      placeholder: |
+        1. Open …
+        2. Choose …
+        3. Set …
+        4. Observe …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Safari 26.0
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Operating system and device
+      placeholder: macOS 26 on MacBook Pro, or iOS 26 on iPhone
+    validations:
+      required: true
+  - type: dropdown
+    id: display
+    attributes:
+      label: Display path
+      options:
+        - HDR-capable preview was shown
+        - SDR glow preview was shown
+        - I am not sure
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional, redacted context
+      description: Paste only logs or screenshots that contain no personal or source-image data.
