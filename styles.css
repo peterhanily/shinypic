@@ -789,7 +789,7 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
 .origin-copy > p:not(.eyebrow) { margin: 7px 0 0; color: #4e5e7f; font-size: 10px; line-height: 1.55; }
 .origin-figure { margin: 0; }
 .origin-image-wrap { position: relative; overflow: hidden; border-radius: 14px; background: #0847f7; box-shadow: 0 8px 22px rgba(8,71,247,.18); }
-.origin-image-wrap img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.origin-image-wrap img { width: 100%; aspect-ratio: 1; object-fit: cover; dynamic-range-limit: no-limit; }
 .origin-image-wrap span { position: absolute; right: 8px; bottom: 8px; left: 8px; padding: 6px 8px; border-radius: 8px; background: rgba(11,20,45,.72); color: white; font-size: 7px; font-weight: 900; text-align: center; backdrop-filter: blur(6px); }
 .origin-figure figcaption { margin-top: 7px; color: #65728d; font-size: 7px; line-height: 1.45; }
 .mini-pipeline { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 0; padding: 0; list-style: none; }

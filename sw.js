@@ -1,4 +1,4 @@
-const CACHE_NAME = "shinypic-shell-v5";
+const CACHE_NAME = "shinypic-shell-v6";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -15,7 +15,8 @@ const APP_SHELL = [
   "./assets/demos/neon-rain.jpg",
   "./assets/demos/crystal-light.jpg",
   "./assets/demos/iris-after-rain.jpg",
-  "./assets/demos/chainlink-case-study.svg",
+  "./assets/demos/chainlink-case-study-sdr.jpg",
+  "./assets/demos/chainlink-original-hdr.jpg",
   "./assets/rec2100-pq.icc",
 ];
 

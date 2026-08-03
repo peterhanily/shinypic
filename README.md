@@ -90,29 +90,30 @@ JPEG.
 
 ![The ShinyPic origin-story dialog explaining the Chainlink case study](docs/images/origin-story.webp)
 
-The first image investigated for this project was a blue Chainlink graphic with
-white line work that appeared unusually bright. Container inspection showed an
-8-bit JPEG with a Rec.2020 PQ profile: the line pixels represented thousands of
-nominal nits, while the blue background stayed much lower. macOS could therefore
-place the lines above normal interface white in available HDR headroom.
+The exact image is a 200 × 200 progressive, 8-bit JPEG supplied from a LinkedIn
+media CDN URL whose path labels it `chainlink_labs_logo`. The delivery URL does
+not establish the artwork's author, owner, official status or license. Technical
+inspection found a 6,604-byte Adobe `Rec. 2020 PQ` ICC profile and no EXIF, XMP,
+animation or gain map. The white woven line work reaches the extreme end of the
+PQ signal while the blue background stays much lower, allowing an HDR-aware
+macOS display path to place the lines above normal interface white.
 
-The original raster came from Creative Fabrica and its license does not allow it
-to be embedded in an application or redistributed in a public repository, so it
-is intentionally absent. The in-app case study uses the unmodified official
-Chainlink symbol and official blue, links to the [Chainlink brand
-guidance](https://chain.link/brand-assets), and states that ShinyPic/CaddyLabs is
-not affiliated with Chainlink. The details and asset boundary are recorded in
-[`assets/demos/LICENSES.md`](assets/demos/LICENSES.md).
+The original HDR raster is now included verbatim and hash-pinned. The sample
+rail uses a colour-managed sRGB conversion of the same pixels so ShinyPic can
+demonstrate rebuilding the effect instead of processing an already-HDR input.
+The source, conversion, rights boundary, and non-endorsement notice are
+recorded in [`assets/demos/LICENSES.md`](assets/demos/LICENSES.md).
 
-| Official SDR source | SDR glow fallback |
+| Exact Rec.2020 PQ source | ShinyPic SDR glow fallback |
 | --- | --- |
-| ![Official white Chainlink symbol on blue](assets/demos/chainlink-case-study.svg) | ![SDR glow rendering of the Chainlink case study](docs/examples/chainlink-sdr-glow.jpg) |
+| ![Exact HDR source with white woven line work on blue](assets/demos/chainlink-original-hdr.jpg) | ![SDR glow rendering of the same case study](docs/examples/chainlink-sdr-glow.jpg) |
 
-**[Download the actual Rec.2100 PQ HDR case-study JPEG](docs/examples/chainlink-shiny-hdr.jpg)**
+**[Download the exact original Rec.2020 PQ JPEG](assets/demos/chainlink-original-hdr.jpg)**
 to test the physically brighter version on a compatible display. GitHub image
 previews may tone-map or flatten HDR, so download the file rather than judging
-its inline thumbnail. Independent verification reports `Rec. ITU-R BT.2100 PQ`.
-The exact hashes and expected profiles are in
+its inline thumbnail. The exact source has SHA-256
+`b9c8e92bafdc0eecde562514670f2181c2d71f42ded7da8baed70e0b40a73594`.
+The source and generated-replica hashes and expected profiles are in
 [`docs/examples/README.md`](docs/examples/README.md).
 
 ## Mobile is a first-class layout

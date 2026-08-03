@@ -9,7 +9,7 @@ import {
   smoothstep,
   srgbToLinear,
 } from "./hdr-core.js";
-import { DEMOS, demoById, resolvedDemoUrl } from "./demo-catalog.js";
+import { DEMOS, demoById, resolvedDemoUrl, resolvedStoryUrl } from "./demo-catalog.js";
 import {
   ImageGuardError,
   validateImageDimensions,
@@ -226,7 +226,9 @@ function renderDemoRail() {
   elements.demoRail.replaceChildren(fragment);
 
   const chainlinkDemo = demoById("chainlink");
-  if (chainlinkDemo) elements.chainlinkStoryImage.src = resolvedDemoUrl(chainlinkDemo, EMBEDDED_ASSETS);
+  if (chainlinkDemo) {
+    elements.chainlinkStoryImage.src = resolvedStoryUrl(chainlinkDemo, EMBEDDED_ASSETS);
+  }
   updateDemoButtons();
 }
 

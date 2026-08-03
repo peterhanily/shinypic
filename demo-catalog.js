@@ -46,11 +46,12 @@ export const DEMOS = Object.freeze([
   }),
   Object.freeze({
     id: "chainlink",
-    title: "The original idea",
-    short: "Chainlink study",
-    source: "./assets/demos/chainlink-case-study.svg",
-    fileName: "chainlink-case-study.svg",
-    alt: "The white Chainlink symbol centered on an official blue background",
+    title: "Original woven logo",
+    short: "HDR origin",
+    source: "./assets/demos/chainlink-case-study-sdr.jpg",
+    storySource: "./assets/demos/chainlink-original-hdr.jpg",
+    fileName: "chainlink-case-study-sdr.jpg",
+    alt: "A white woven hexagonal line graphic on a blue background",
     recipe: "sparkle",
     selection: "lights",
     amount: 0.98,
@@ -68,4 +69,8 @@ export function demoById(id) {
 
 export function resolvedDemoUrl(demo, embeddedAssets = globalThis.__SHINYPIC_ASSETS__ || {}) {
   return embeddedAssets.demoUrls?.[demo.id] || demo.source;
+}
+
+export function resolvedStoryUrl(demo, embeddedAssets = globalThis.__SHINYPIC_ASSETS__ || {}) {
+  return embeddedAssets.storyUrls?.[demo.id] || demo.storySource || resolvedDemoUrl(demo, embeddedAssets);
 }

@@ -8,7 +8,7 @@ const OUTPUT_DIR = path.join(ROOT, "dist-single");
 const OUTPUT_FILE = path.join(OUTPUT_DIR, "index.html");
 const FRIENDLY_OUTPUT_FILE = path.join(OUTPUT_DIR, "shinypic-standalone.html");
 
-const [htmlSource, cssSource, coreSource, catalogSource, guardSource, appSource, iconSvg, appleIcon, profile, demoFiles] = await Promise.all([
+const [htmlSource, cssSource, coreSource, catalogSource, guardSource, appSource, iconSvg, appleIcon, profile, demoFiles, storyFiles] = await Promise.all([
   readFile(path.join(ROOT, "index.html"), "utf8"),
   readFile(path.join(ROOT, "styles.css"), "utf8"),
   readFile(path.join(ROOT, "hdr-core.js"), "utf8"),
@@ -22,16 +22,25 @@ const [htmlSource, cssSource, coreSource, catalogSource, guardSource, appSource,
     demo,
     bytes: await readFile(path.join(ROOT, demo.source.replace(/^\.\//, ""))),
   }))),
+  Promise.all(DEMOS.filter((demo) => demo.storySource).map(async (demo) => ({
+    demo,
+    bytes: await readFile(path.join(ROOT, demo.storySource.replace(/^\.\//, ""))),
+  }))),
 ]);
 
 const demoUrls = Object.fromEntries(demoFiles.map(({ demo, bytes }) => [
   demo.id,
   `data:${mimeTypeFor(demo.source)};base64,${bytes.toString("base64")}`,
 ]));
+const storyUrls = Object.fromEntries(storyFiles.map(({ demo, bytes }) => [
+  demo.id,
+  `data:${mimeTypeFor(demo.storySource)};base64,${bytes.toString("base64")}`,
+]));
 const iconUrl = `data:image/svg+xml;base64,${iconSvg.toString("base64")}`;
 const appleIconUrl = `data:image/png;base64,${appleIcon.toString("base64")}`;
 const embeddedAssets = `globalThis.__SHINYPIC_ASSETS__=${JSON.stringify({
   demoUrls,
+  storyUrls,
   profileBase64: profile.toString("base64"),
 })};`;
 const core = coreSource.replace(/^export\s+/gm, "");
@@ -50,6 +59,10 @@ let html = htmlSource
 
 for (const demo of DEMOS) {
   html = html.replaceAll(`src="${demo.source}"`, `src="${demoUrls[demo.id]}"`);
+  if (demo.storySource) {
+    html = html.replaceAll(`src="${demo.storySource}"`, `src="${storyUrls[demo.id]}"`);
+    html = html.replaceAll(`href="${demo.storySource}"`, `href="${storyUrls[demo.id]}"`);
+  }
 }
 
 html = `<!-- ShinyPic standalone build: no server, network, account or upload required. -->\n${html}`;

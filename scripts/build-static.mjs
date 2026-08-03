@@ -5,6 +5,9 @@ import { DEMOS } from "../demo-catalog.js";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const OUTPUT = path.join(ROOT, "dist");
+const DEMO_FILES = [...new Set(DEMOS.flatMap((demo) => [demo.source, demo.storySource]
+  .filter(Boolean)
+  .map((source) => source.replace(/^\.\//, ""))))];
 const FILES = [
   "index.html",
   "styles.css",
@@ -24,7 +27,7 @@ const FILES = [
   "assets/apple-touch-icon.png",
   "assets/social-card.webp",
   "assets/rec2100-pq.icc",
-  ...DEMOS.map((demo) => demo.source.replace(/^\.\//, "")),
+  ...DEMO_FILES,
 ];
 
 await rm(OUTPUT, { recursive: true, force: true });
