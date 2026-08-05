@@ -1,4 +1,4 @@
-const CACHE_NAME = "shinypic-shell-v8";
+const CACHE_NAME = "shinypic-shell-v9";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -64,6 +64,33 @@ self.addEventListener("fetch", (event) => {
       fetch(event.request).catch(async () =>
         (await caches.match(event.request, { ignoreSearch: true }))
         || (await caches.match("./index.html"))),
+    );
+    return;
+  }
+
+  // Code and styles go to the network first, falling back to the cache offline.
+  //
+  // They used to be cache-first, which meant a returning visitor kept an old
+  // stylesheet forever while navigations fetched new markup: the site rendered
+  // as new HTML against stale CSS, and no amount of correct deployment fixed it
+  // because the request never left the device. Bumping CACHE_NAME alone would
+  // only paper over it until the next release.
+  //
+  // Images and the ICC profile stay cache-first. They are large, they change
+  // rarely, and _headers already gives them a long max-age.
+  const isCode = /\.(?:css|js|webmanifest)$/.test(url.pathname);
+
+  if (isCode) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request)),
     );
     return;
   }
