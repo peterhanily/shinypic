@@ -9,9 +9,9 @@
  * There is no bit-packing, no error correction and no machine decoder, because
  * the decoder is an eye. That removes the one thing that would make this a covert
  * channel rather than a toy: the reader needs no software, no key and no
- * instructions, only a good screen. It also sidesteps the fact that Safari, the
- * platform most likely to have a good screen, cannot read raw HDR pixels back out
- * of a canvas at all.
+ * instructions, only a screen with headroom. It also sidesteps the fact that
+ * Safari, the platform most likely to have that headroom, cannot read raw HDR
+ * pixels back out of a canvas at all.
  *
  * Nothing here is encryption, and nothing is hidden from anyone with the
  * hardware. See DISCLOSURE.
@@ -30,7 +30,7 @@ export const DISCLOSURE = Object.freeze({
   headline: "This hides nothing from anyone who has the screen for it.",
   body: [
     "Overwhite writes your message in light above ordinary white. On a display with headroom it is simply readable: no key, no software, no trick. Without headroom it renders as a blank white rectangle, because that screen cannot show anything above white.",
-    "That is the whole mechanism. It is not encryption, it is not authentication, and it protects the message from nobody. Anyone who opens the file on better hardware reads it, and anyone who knows the technique recovers it in seconds with ordinary image tools.",
+    "That is the whole mechanism. It is not encryption, it is not authentication, and it protects the message from nobody. Anyone who opens the file on an HDR screen reads it, and anyone who knows the technique recovers it in seconds with ordinary image tools.",
     "Do not put anything in here that would hurt you if it were read aloud. If you need a message to be private, encrypt it with a real tool.",
   ],
 });

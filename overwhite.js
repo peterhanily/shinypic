@@ -280,8 +280,8 @@ function whoCanRead(lineCount, stops) {
     ];
   }
   return [
-    el("strong", { text: "Good screens read it. " }),
-    document.createTextNode("Recent iPhones, MacBook Pro displays and HDR monitors show the words. Everything else shows a blank white card."),
+    el("strong", { text: "HDR screens read it. " }),
+    document.createTextNode("Recent iPhones, MacBook Pro displays and HDR monitors show the words. Every other screen shows a blank white card."),
   ];
 }
 
@@ -289,7 +289,7 @@ function whoCanRead(lineCount, stops) {
 async function copyCaption() {
   const caption = [
     "There is a message in this picture.",
-    "If you see a blank white card, your screen cannot show it.",
+    "If you see a blank white card, it needs an HDR screen to show up.",
     "Made with ShinyPic Overwhite: https://shinypic.pages.dev/overwhite",
   ].join("\n");
   try {
@@ -351,7 +351,7 @@ async function downloadPlate() {
 
     elements.downloadMeta.textContent =
       `${(blob.size / 1024).toFixed(0)} KB · ${EXPORT_WIDTH}×${height} · Rec.2100 PQ`;
-    showToast("Saved", "Send it to someone with a good screen.");
+    showToast("Saved", "Send it to someone with an HDR screen.");
   } catch (error) {
     console.error(error);
     elements.downloadMeta.textContent = previous;
