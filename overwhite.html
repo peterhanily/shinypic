@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#08090c">
-  <meta name="color-scheme" content="dark">
-  <meta name="description" content="Write a short message in light above ordinary white. Readable on a display with HDR headroom, blank white without one. Not encryption, and not private.">
+  <meta name="theme-color" content="#f7f3ea">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Leave a note that only a screen with HDR headroom can read. Blank white to everyone else. Free, private to your device, and honestly not a secret.">
   <meta name="robots" content="index,follow">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ShinyPic">
-  <meta property="og:title" content="Overwhite">
-  <meta property="og:description" content="A plate at 999 nits with your words on it at 1,189. Blank without headroom, readable with it.">
+  <meta property="og:title" content="Overwhite — leave a note only bright screens can read">
+  <meta property="og:description" content="Write it in light. Good screens see words, everyone else sees a blank white card.">
   <meta property="og:url" content="https://shinypic.pages.dev/overwhite.html">
-  <title>Overwhite</title>
+  <title>Overwhite — leave a note only bright screens can read</title>
   <link rel="canonical" href="https://shinypic.pages.dev/overwhite.html">
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
@@ -20,10 +20,10 @@
   <script type="module" src="./overwhite.js"></script>
 </head>
 <body class="arcade-body">
-  <a class="skip-link" href="#composer">Skip to the composer</a>
+  <a class="skip-link" href="#composer">Skip to the note</a>
 
   <header class="arcade-header">
-    <a class="arcade-brand" href="./arcade.html" aria-label="Back to the ShinyPic Arcade">
+    <a class="arcade-brand" href="./" aria-label="Back to the ShinyPic studio">
       <span class="arcade-brand-mark" aria-hidden="true">
         <svg viewBox="0 0 44 44" fill="none">
           <path d="M22 2.5v8M22 33.5v8M2.5 22h8M33.5 22h8M8.2 8.2l5.6 5.6M30.2 30.2l5.6 5.6M35.8 8.2l-5.6 5.6M13.8 30.2l-5.6 5.6" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
@@ -46,57 +46,77 @@
   <main class="arcade-main">
     <div class="hub">
       <div class="hub-intro hub-intro--tool">
-        <p class="hub-eyebrow"><span class="wedge" aria-hidden="true"><i style="--step:.25"></i><i style="--step:.5"></i><i style="--step:.75"></i><i style="--step:1"></i></span> Write in light</p>
-        <h1 class="hub-title">Overwhite.</h1>
+        <p class="hub-eyebrow"><span class="wedge" aria-hidden="true"><i style="--step:.2"></i><i style="--step:.5"></i><i style="--step:.8"></i><i style="--step:1"></i></span> Overwhite</p>
+        <h1 class="hub-title">Leave a note only<br>bright screens can read.</h1>
         <p class="hub-lede">
-          Your words at <strong class="figure">1,189 nits</strong> on a plate at
-          <strong class="figure">999</strong>. <em>Blank</em> on a screen without headroom, simply
-          readable on one with it.
+          Write something, and Overwhite prints it in light instead of ink. Anyone with a good
+          screen just reads it. Everyone else gets a <em>blank white card</em> and no idea what
+          they are missing.
         </p>
       </div>
 
       <section class="consent-gate" id="consentGate" hidden>
-        <p class="consent-headline">This hides nothing from anyone who has the screen for it.</p>
-        <p>Not encryption, not private, and no protection at all. The full disclosure is at the foot of this page.</p>
-        <button class="arcade-button arcade-button--primary" type="button" id="consentAccept">I understand, let the plate make light</button>
+        <p class="consent-headline">Fun, not secret.</p>
+        <p>
+          This is a party trick, not a lockbox. Anyone with a better screen than yours reads it
+          instantly, and anyone who knows the trick can pull it out with ordinary image tools.
+          Write accordingly.
+        </p>
+        <button class="arcade-button arcade-button--primary" type="button" id="consentAccept">Got it, let it shine</button>
       </section>
 
-      <section class="composer" id="composer" aria-label="Compose a plate">
+      <section class="composer" id="composer" aria-label="Write a note">
         <div class="composer-controls">
           <label class="composer-field">
-            <span class="composer-label">Message <em id="messageCounter" class="figure">0/90</em></span>
+            <span class="composer-label">Your note <em id="messageCounter" class="figure">0/90</em></span>
             <textarea id="messageInput" rows="3" spellcheck="false" autocomplete="off"
-              placeholder="MEET AT THE HARBOUR LIGHT">THE PLATE IS NOT BLANK</textarea>
+              placeholder="MEET AT THE HARBOUR LIGHT">IF YOU CAN READ THIS YOUR SCREEN IS GOOD</textarea>
           </label>
 
+          <div class="preset-row" role="group" aria-label="Quick notes">
+            <button class="preset-chip" type="button" data-preset="IF YOU CAN READ THIS YOUR SCREEN IS GOOD">screen flex</button>
+            <button class="preset-chip" type="button" data-preset="YOU FOUND IT">you found it</button>
+            <button class="preset-chip" type="button" data-preset="HAPPY BIRTHDAY LOOK CLOSER">birthday</button>
+            <button class="preset-chip" type="button" data-preset="NOT EVERYONE CAN SEE THIS">smug</button>
+            <button class="preset-chip" type="button" data-preset="TURN YOUR BRIGHTNESS DOWN AND LOOK AGAIN">a hint</button>
+          </div>
+
           <label class="composer-field">
-            <span class="composer-label">Preview exposure <em id="exposureValue" class="figure">true plate</em></span>
+            <span class="composer-label">Can't see it? <em id="exposureValue" class="figure">off</em></span>
             <input id="exposureRange" type="range" min="0" max="35" value="0" step="1">
-            <small>A viewing aid for screens without headroom. Dim the preview until the message appears. The exported file never changes.</small>
+            <small>Slide to dim the preview until the words appear. This is only for looking. The file you send is always the bright one.</small>
           </label>
 
           <button class="arcade-button arcade-button--primary download-button" type="button" id="downloadPlate">
-            <span>Download plate</span>
+            <span>Save the note</span>
             <small id="downloadMeta">PNG · Rec.2100 PQ</small>
           </button>
+          <button class="arcade-button arcade-button--ghost" type="button" id="copyCaption">Copy a caption to post with it</button>
         </div>
 
         <div class="composer-preview">
           <div class="plate-stage" id="plateStage">
-            <img class="plate-image" id="plateImage" alt="The plate. On a display with headroom it carries your message; without one it is a blank white rectangle." draggable="false">
+            <img class="plate-image" id="plateImage" alt="Your note, printed in light. On a screen with headroom it reads as words; without one it is a blank white card." draggable="false">
           </div>
-          <div class="rung-meters" id="plateReadout"></div>
-          <p class="plate-status" id="plateStatus" aria-live="polite"></p>
+          <p class="who-reads" id="whoReads"></p>
+          <details class="method-note">
+            <summary>The numbers</summary>
+            <div class="method-body">
+              <div class="rung-meters" id="plateReadout"></div>
+              <p id="plateStatus"></p>
+              <p>The card sits at 999 nits and your words at 1,189, a fixed 18.9% brighter. A screen without headroom renders both as the same white, so the words vanish into the card. A screen with headroom simply shows them.</p>
+            </div>
+          </details>
         </div>
       </section>
 
       <footer class="hub-foot">
         <div class="hub-foot-col">
-          <h2>How to read one</h2>
+          <h2>How someone reads it</h2>
           <p>
-            Open the PNG on a display with HDR headroom, in Safari 26+ or Chrome 136+. The words are
-            just there. Nothing to install, nothing to decode. On any other screen it is a white
-            rectangle, and the exposure slider is how you read one anyway.
+            Send them the PNG. If they open it on a recent iPhone, a MacBook Pro, or any HDR
+            monitor, the words are just there. Nothing to install and nothing to decode. On any
+            other screen it is a white rectangle, which is half the fun.
           </p>
         </div>
         <div class="hub-foot-col">
@@ -104,21 +124,30 @@
           <div id="disclosureBody" class="disclosure-body"></div>
         </div>
         <div class="hub-foot-col">
-          <h2>The whole format</h2>
+          <h2>Under the hood</h2>
           <ul class="fact-list">
-            <li><span>Plate</span><span class="figure">999 nits</span></li>
-            <li><span>Message</span><span class="figure">1,189 nits</span></li>
+            <li><span>Card</span><span class="figure">999 nits</span></li>
+            <li><span>Words</span><span class="figure">1,189 nits</span></li>
             <li><span>Contrast</span><span class="figure">+18.9%</span></li>
-            <li><span>Carrier</span><span class="figure">PNG · Rec.2100 PQ</span></li>
-            <li><span>Capacity</span><span class="figure">90 chars</span></li>
+            <li><span>File</span><span class="figure">PNG · Rec.2100 PQ</span></li>
+            <li><span>Length</span><span class="figure">90 characters</span></li>
           </ul>
           <p>
-            That is the entire specification, published on purpose. A technique whose security
-            depends on nobody knowing it does not have any.
+            Built in your browser and never uploaded. The whole recipe is published here on
+            purpose: a trick that only works while nobody knows it is not much of a trick.
           </p>
         </div>
       </footer>
     </div>
   </main>
+
+  <div class="arcade-toast" id="arcadeToast" role="status" aria-live="polite" aria-atomic="true">
+    <span class="toast-wedge" aria-hidden="true"></span>
+    <span class="arcade-toast-copy">
+      <strong id="arcadeToastTitle"></strong>
+      <small id="arcadeToastMessage"></small>
+    </span>
+    <button type="button" id="arcadeToastClose" aria-label="Dismiss">×</button>
+  </div>
 </body>
 </html>
