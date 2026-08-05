@@ -912,9 +912,10 @@ ul { padding: 0; list-style: none; }
   .arcade-header { padding: 0 10px; gap: 8px; }
 }
 
-/* The arcade carries two safety controls as well as the nav. At the narrowest
-   supported width everything tightens rather than anything disappearing. */
-@media (max-width: 400px) {
+/* The arcade carries two safety controls as well as the nav, so it runs out of
+   width sooner than the other pages. Everything tightens rather than anything
+   disappearing. */
+@media (max-width: 480px) {
   .site-nav { padding: 2px; gap: 1px; }
   .site-nav a { padding: 0 6px; font-size: 10px; }
   .chrome-toggle { padding: 0 7px; gap: 5px; font-size: 10px; }
@@ -934,3 +935,30 @@ ul { padding: 0; list-style: none; }
 .hub-foot-col--links .fact-list li { justify-content: flex-start; }
 .hub-foot-col--links a { color: var(--blue); font-weight: 700; text-decoration: none; }
 .hub-foot-col--links a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* Each section gets a mark drawn from what it actually is: a sunburst for the
+   studio, a rising ramp for the arcade, a lit plate for Overwhite. Three bare
+   words read as a list of links; three marked items read as a control. */
+.site-nav a { gap: 7px; }
+.nav-mark { display: inline-flex; gap: 1.5px; align-items: flex-end; width: 13px; height: 13px; justify-content: center; }
+.nav-mark i { width: 3px; border-radius: 1px; background: currentColor; }
+
+.nav-mark--studio {
+  align-self: center;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 2px transparent, 0 -5px 0 -3.5px currentColor, 0 5px 0 -3.5px currentColor,
+              -5px 0 0 -3.5px currentColor, 5px 0 0 -3.5px currentColor;
+  width: 7px; height: 7px;
+}
+.nav-mark--arcade i:nth-child(1) { height: 5px; }
+.nav-mark--arcade i:nth-child(2) { height: 9px; }
+.nav-mark--arcade i:nth-child(3) { height: 13px; }
+.nav-mark--over { align-items: center; }
+.nav-mark--over::before, .nav-mark--over::after {
+  content: ""; width: 3px; height: 9px; border-radius: 1px; background: currentColor; opacity: .45;
+}
+.nav-mark--over i { height: 9px; }
+
+@media (max-width: 560px) { .site-nav a { gap: 5px; } .nav-mark { width: 11px; } }
+@media (max-width: 400px) { .nav-mark { display: none; } }

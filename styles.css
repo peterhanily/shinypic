@@ -770,14 +770,6 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
 .arcade-promo-go { color: rgba(242, 237, 226, .5); font-size: 16px; }
 .arcade-promo:hover .arcade-promo-go { color: var(--orange); }
 
-.header-link--arcade { border-color: #23262e; background: #0d0f14; color: #f2ede2; }
-.header-link--arcade:hover { border-color: var(--orange); color: var(--orange); }
-.header-wedge { display: flex; gap: 1.5px; align-items: flex-end; }
-.header-wedge i { width: 3px; border-radius: 1px; background: currentColor; }
-.header-wedge i:nth-child(1) { height: 5px; opacity: .4; }
-.header-wedge i:nth-child(2) { height: 8px; opacity: .6; }
-.header-wedge i:nth-child(3) { height: 11px; opacity: .8; }
-.header-wedge i:nth-child(4) { height: 14px; }
 
 .export-dock {
   z-index: 20;
@@ -905,9 +897,7 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
 
 @media (max-width: 760px) {
   .header-link { width: 36px; justify-content: center; padding: 0; }
-  /* The other header links keep an <svg> when their label is hidden. The arcade
-     link draws its mark with spans, so exempt it or it collapses to an empty box. */
-  .header-link span:not(.header-wedge) { display: none; }
+  .header-link span { display: none; }
   .about-dialog { padding: 24px 18px 20px; }
   .dialog-facts { grid-template-columns: 1fr; }
   .origin-story { grid-template-columns: 1fr; padding: 16px; }
@@ -1068,3 +1058,30 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
   .brand-mark svg { width: 28px; height: 28px; }
   .app-header { padding: 0 10px; gap: 8px; }
 }
+
+/* Each section gets a mark drawn from what it actually is: a sunburst for the
+   studio, a rising ramp for the arcade, a lit plate for Overwhite. Three bare
+   words read as a list of links; three marked items read as a control. */
+.site-nav a { gap: 7px; }
+.nav-mark { display: inline-flex; gap: 1.5px; align-items: flex-end; width: 13px; height: 13px; justify-content: center; }
+.nav-mark i { width: 3px; border-radius: 1px; background: currentColor; }
+
+.nav-mark--studio {
+  align-self: center;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 2px transparent, 0 -5px 0 -3.5px currentColor, 0 5px 0 -3.5px currentColor,
+              -5px 0 0 -3.5px currentColor, 5px 0 0 -3.5px currentColor;
+  width: 7px; height: 7px;
+}
+.nav-mark--arcade i:nth-child(1) { height: 5px; }
+.nav-mark--arcade i:nth-child(2) { height: 9px; }
+.nav-mark--arcade i:nth-child(3) { height: 13px; }
+.nav-mark--over { align-items: center; }
+.nav-mark--over::before, .nav-mark--over::after {
+  content: ""; width: 3px; height: 9px; border-radius: 1px; background: currentColor; opacity: .45;
+}
+.nav-mark--over i { height: 9px; }
+
+@media (max-width: 560px) { .site-nav a { gap: 5px; } .nav-mark { width: 11px; } }
+@media (max-width: 400px) { .nav-mark { display: none; } }
