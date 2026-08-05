@@ -52,6 +52,13 @@ const elements = {
   gateAccept: document.querySelector("#consentAccept"),
   disclosure: document.querySelector("#disclosureBody"),
   status: document.querySelector("#plateStatus"),
+  whoReads: document.querySelector("#whoReads"),
+  presets: [...document.querySelectorAll(".preset-chip")],
+  copyCaption: document.querySelector("#copyCaption"),
+  toast: document.querySelector("#arcadeToast"),
+  toastTitle: document.querySelector("#arcadeToastTitle"),
+  toastMessage: document.querySelector("#arcadeToastMessage"),
+  toastClose: document.querySelector("#arcadeToastClose"),
 };
 
 const state = {
@@ -149,6 +156,17 @@ function bindControls() {
 
   elements.download.addEventListener("click", downloadPlate);
 
+  for (const chip of elements.presets) {
+    chip.addEventListener("click", () => {
+      elements.message.value = chip.dataset.preset;
+      updateCounter();
+      scheduleRender();
+    });
+  }
+
+  elements.copyCaption.addEventListener("click", copyCaption);
+  elements.toastClose.addEventListener("click", hideToast);
+
   elements.gateAccept.addEventListener("click", () => {
     state.acknowledged = true;
     save();
@@ -173,8 +191,8 @@ function exposureStops() {
 function updateExposureLabel() {
   const stops = exposureStops();
   elements.exposureValue.textContent = stops === 0
-    ? "true plate"
-    : `−${stops.toFixed(1)} stops`;
+    ? "off"
+    : `dimmed ${stops.toFixed(1)} stops`;
 }
 
 let renderTimer = null;
@@ -242,10 +260,58 @@ async function render() {
     meter("Lines", `${lines.length}/${MAX_LINES}`),
   );
   elements.status.textContent = stops > 0
-    ? `Preview underexposed by ${stops.toFixed(1)} stops so it can be read without headroom. The exported file is always the true plate.`
-    : plateNits > BASE_WHITE_NITS
-      ? "True plate. On a screen without headroom this is a blank white rectangle."
-      : "";
+    ? `The preview is dimmed by ${stops.toFixed(1)} stops so it can be read without headroom. The saved file is always the bright one.`
+    : "This is the real thing. On a screen with no headroom it is a blank white card.";
+
+  elements.whoReads.innerHTML = "";
+  elements.whoReads.append(...whoCanRead(lines.length, stops));
+}
+
+/** A plain-language answer to the only question anyone actually asks. */
+function whoCanRead(lineCount, stops) {
+  if (!lineCount) {
+    return [document.createTextNode("Write something and it will appear here, in light.")];
+  }
+  if (stops > 0) {
+    return [
+      document.createTextNode("You are looking at the dimmed preview. "),
+      el("strong", { text: "The file itself stays bright" }),
+      document.createTextNode(", so it will still be blank to anyone without headroom."),
+    ];
+  }
+  return [
+    el("strong", { text: "Good screens read it. " }),
+    document.createTextNode("Recent iPhones, MacBook Pro displays and HDR monitors show the words. Everything else shows a blank white card."),
+  ];
+}
+
+/** A caption to post alongside the image, so the joke lands. */
+async function copyCaption() {
+  const caption = [
+    "There is a message in this picture.",
+    "If you see a blank white card, your screen cannot show it.",
+    "Made with ShinyPic Overwhite: https://shinypic.pages.dev/overwhite",
+  ].join("\n");
+  try {
+    await navigator.clipboard.writeText(caption);
+    showToast("Caption copied", "Paste it wherever you post the image.");
+  } catch {
+    showToast("Could not copy", "Your browser refused clipboard access.");
+  }
+}
+
+let toastTimer = null;
+function showToast(title, message) {
+  clearTimeout(toastTimer);
+  elements.toastTitle.textContent = title;
+  elements.toastMessage.textContent = message;
+  elements.toast.classList.add("is-visible");
+  toastTimer = setTimeout(hideToast, 5000);
+}
+
+function hideToast() {
+  clearTimeout(toastTimer);
+  elements.toast.classList.remove("is-visible");
 }
 
 function meter(label, value) {
@@ -285,6 +351,7 @@ async function downloadPlate() {
 
     elements.downloadMeta.textContent =
       `${(blob.size / 1024).toFixed(0)} KB · ${EXPORT_WIDTH}×${height} · Rec.2100 PQ`;
+    showToast("Saved", "Send it to someone with a good screen.");
   } catch (error) {
     console.error(error);
     elements.downloadMeta.textContent = previous;
