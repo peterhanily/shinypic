@@ -153,9 +153,32 @@ ul { padding: 0; list-style: none; }
 }
 .chrome-link:hover { border-color: var(--orange); color: var(--orange); }
 
+/*
+ * Narrow screens. These controls change how bright the page is allowed to get,
+ * so they must stay legible: an unlabelled square is not a safety control.
+ * The word-mark suffix goes instead, and the labels shorten to their verbs.
+ */
 @media (max-width: 720px) {
-  .chrome-toggle span:not(.chrome-toggle-mark) { display: none; }
-  .chrome-toggle { padding: 7px 9px; }
+  .arcade-header { padding: 12px 16px; gap: 10px; }
+  .arcade-brand-text span { display: none; }
+  .arcade-header-actions { gap: 6px; }
+  .chrome-toggle, .chrome-link { padding: 7px 10px; font-size: 11px; }
+  .chrome-toggle { gap: 6px; }
+  .chrome-toggle .label-long { display: none; }
+}
+
+@media (min-width: 721px) {
+  .chrome-toggle .label-short { display: none; }
+}
+
+/* html declares min-width 320px. At that width the word-mark yields to the
+   controls, since the sunburst still carries the link and its aria-label. */
+@media (max-width: 360px) {
+  .arcade-header { padding: 10px 12px; gap: 8px; }
+  .arcade-brand-text strong { display: none; }
+  .arcade-header-actions { gap: 5px; }
+  .chrome-toggle, .chrome-link { padding: 6px 8px; }
+  .chrome-toggle { gap: 5px; }
 }
 
 /* -------------------------------------------------------------------- hub */
@@ -277,8 +300,12 @@ ul { padding: 0; list-style: none; }
 
 @media (max-width: 860px) {
   .bench { grid-template-columns: 1fr; gap: 16px; padding: 22px 4px; }
-  .bench-specimen { max-width: 320px; }
+  .bench-specimen { width: 100%; max-width: 360px; }
   .bench-go { justify-self: start; }
+}
+
+@media (max-width: 480px) {
+  .hub-grid.is-clamped .bench-specimen::after { content: "clamped"; }
 }
 
 /* Not a bench: a tool. Marked out by its rule rather than by decoration. */
@@ -731,19 +758,24 @@ ul { padding: 0; list-style: none; }
 
 /* ------------------------------------------------------------- overwhite */
 
+/*
+ * Overwhite is a tool, not a landing page, so its intro is short and the plate
+ * comes early. The gate says the one thing that matters and points at the full
+ * disclosure in the footer rather than reprinting it above the fold.
+ */
+.hub-intro--tool { padding: clamp(28px, 5vw, 56px) 0 clamp(20px, 3vw, 32px); }
+
 .consent-gate {
   max-width: 640px;
-  margin-bottom: 44px;
-  padding: 24px;
+  margin-bottom: 32px;
+  padding: 18px 20px;
   border: 1px solid var(--rule-strong);
   border-left: 2px solid var(--orange);
   background: var(--ground-lift);
 }
-.consent-gate h2 { margin-bottom: 12px; font-size: 20px; font-weight: 800; letter-spacing: -.02em; }
-.consent-gate > p { max-width: 62ch; color: var(--bone-dim); font-size: 14px; line-height: 1.6; }
-.consent-body { display: grid; gap: 10px; margin: 20px 0; }
-.consent-body p { max-width: 66ch; color: var(--bone-dim); font-size: 13px; line-height: 1.6; }
-.consent-body strong { color: var(--bone); }
+.consent-headline { margin-bottom: 8px; font-size: 15px; font-weight: 800; letter-spacing: -.01em; }
+.consent-gate > p { max-width: 62ch; color: var(--bone-dim); font-size: 13px; line-height: 1.6; }
+.consent-gate .arcade-button { margin-top: 16px; }
 
 .composer {
   display: grid;
@@ -752,7 +784,12 @@ ul { padding: 0; list-style: none; }
   align-items: start;
   padding-bottom: 20px;
 }
-@media (max-width: 820px) { .composer { grid-template-columns: 1fr; } }
+@media (max-width: 820px) {
+  .composer { grid-template-columns: 1fr; }
+  /* Stacked, the plate comes first. It is the thing the page is about, and the
+     controls mean nothing until you have seen what they act on. */
+  .composer-preview { order: -1; }
+}
 
 .composer-controls { display: grid; gap: 24px; }
 .composer-field { display: grid; gap: 8px; }

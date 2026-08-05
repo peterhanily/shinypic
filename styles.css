@@ -730,13 +730,12 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
  * against paper. This card is the only dark surface in the studio on purpose:
  * it is a window into that room rather than a button that happens to be inverted.
  */
+.dark-promos { display: grid; gap: 8px; width: calc(100% - 52px); margin: 0 26px 24px; }
 .arcade-promo {
-  width: calc(100% - 52px);
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 12px;
-  margin: 0 26px 24px;
   padding: 13px 14px;
   border: 1px solid #23262e;
   border-radius: 14px;
@@ -759,6 +758,11 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
 .arcade-promo-wedge i:nth-child(4) { height: 19px; background: rgba(242, 237, 226, .72); }
 .arcade-promo-wedge i:nth-child(5) { height: 23px; background: rgba(242, 237, 226, .88); }
 .arcade-promo-wedge i:nth-child(6) { height: 27px; background: var(--orange); }
+/* Overwhite's mark is a plate, not a ramp: a flat run with the message lit in it.
+   The nth-child selectors above outrank a bare descendant rule, so match theirs. */
+.arcade-promo-wedge--flat i:nth-child(n) { height: 19px; background: rgba(242, 237, 226, .28); }
+.arcade-promo-wedge--flat i:nth-child(3),
+.arcade-promo-wedge--flat i:nth-child(4) { background: var(--orange); }
 .arcade-promo-copy { min-width: 0; display: grid; gap: 3px; }
 .arcade-promo strong { font-size: 12px; letter-spacing: -.01em; }
 .arcade-promo small { color: rgba(242, 237, 226, .58); font-size: 10px; line-height: 1.45; }
@@ -894,13 +898,15 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
   .control-section { padding-right: 20px; padding-left: 20px; }
   .truth-card { margin-right: 20px; margin-left: 20px; }
   .story-link { width: calc(100% - 40px); margin-right: 20px; margin-left: 20px; }
-  .arcade-promo { width: calc(100% - 40px); margin-right: 20px; margin-left: 20px; }
+  .dark-promos { width: calc(100% - 40px); margin-right: 20px; margin-left: 20px; }
   .export-dock { position: sticky; bottom: 0; }
 }
 
 @media (max-width: 760px) {
   .header-link { width: 36px; justify-content: center; padding: 0; }
-  .header-link span { display: none; }
+  /* The other header links keep an <svg> when their label is hidden. The arcade
+     link draws its mark with spans, so exempt it or it collapses to an empty box. */
+  .header-link span:not(.header-wedge) { display: none; }
   .about-dialog { padding: 24px 18px 20px; }
   .dialog-facts { grid-template-columns: 1fr; }
   .origin-story { grid-template-columns: 1fr; padding: 16px; }
@@ -952,7 +958,7 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
   input[type="range"] { height: 28px; }
   .truth-card { margin-right: 16px; margin-bottom: 20px; margin-left: 16px; }
   .story-link { width: calc(100% - 32px); margin: -10px 16px 20px; }
-  .arcade-promo { width: calc(100% - 32px); margin: 0 16px 20px; }
+  .dark-promos { width: calc(100% - 32px); margin: 0 16px 20px; }
   .export-dock { padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); }
   .export-status { margin-bottom: 5px; }
   .export-status small { display: none; }
@@ -960,6 +966,13 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
   .save-button, .share-button { min-height: 46px; }
   .sdr-link { margin-top: 4px; font-size: 7px; }
   .toast { right: 14px; bottom: calc(92px + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 340px) {
+  /* html declares min-width 320px, so the narrowest supported phone must fit. */
+  .app-header { padding: 0 12px; }
+  .header-actions { gap: 5px; }
+  .brand { gap: 7px; }
 }
 
 @media (max-width: 420px) {
