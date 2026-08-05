@@ -26,6 +26,7 @@ import {
   PLATE_NITS,
   chooseWrapWidth,
   exposedNits,
+  inkContrastLabel,
   normalizeMessage,
   plateAspect,
   plateFileName,
@@ -74,6 +75,7 @@ initialize();
 async function initialize() {
   restore();
   renderDisclosure();
+  renderFacts();
   bindControls();
   applyRangeLimit();
 
@@ -92,6 +94,18 @@ async function loadProfile() {
     ? base64ToBytes(EMBEDDED_ASSETS.profileBase64)
     : new Uint8Array(await (await fetch(PROFILE_URL, { cache: "force-cache" })).arrayBuffer());
   return deflateBytes(bytes);
+}
+
+/** Fill every quoted photometric figure from the constants that produce the file. */
+function renderFacts() {
+  const facts = {
+    plate: formatNits(PLATE_NITS),
+    ink: formatNits(INK_NITS),
+    contrast: inkContrastLabel(),
+  };
+  for (const node of document.querySelectorAll("[data-fact]")) {
+    node.textContent = facts[node.dataset.fact] ?? "";
+  }
 }
 
 function restore() {
@@ -136,6 +150,9 @@ function applyRangeLimit() {
 }
 
 function bindControls() {
+  // Plugging in a different monitor changes the honest answer, so re-render.
+  window.matchMedia?.("(dynamic-range: high)")?.addEventListener?.("change", scheduleRender);
+
   elements.message.maxLength = MAX_MESSAGE_CHARS;
   elements.message.addEventListener("input", () => {
     updateCounter();
@@ -256,7 +273,7 @@ async function render() {
   elements.readout.replaceChildren(
     meter("Plate", formatNits(plateNits)),
     meter("Message", formatNits(inkNits)),
-    meter("Contrast", "+18.9%"),
+    meter("Contrast", inkContrastLabel()),
     meter("Lines", `${lines.length}/${MAX_LINES}`),
   );
   elements.status.textContent = stops > 0
@@ -265,6 +282,19 @@ async function render() {
 
   elements.whoReads.innerHTML = "";
   elements.whoReads.append(...whoCanRead(lines.length, stops));
+}
+
+/**
+ * Whether this browser and screen can render light above ordinary white.
+ *
+ * The studio and the arcade both report this and Overwhite did not, which made
+ * a working plate indistinguishable from a broken one: on a screen with no
+ * headroom the card is blank, and blank is exactly what a bug looks like.
+ */
+function hasHeadroom() {
+  const hdrScreen = window.matchMedia?.("(dynamic-range: high)")?.matches ?? false;
+  const limitSupported = window.CSS?.supports?.("dynamic-range-limit", "no-limit") ?? false;
+  return hdrScreen && limitSupported;
 }
 
 /** A plain-language answer to the only question anyone actually asks. */
@@ -277,6 +307,12 @@ function whoCanRead(lineCount, stops) {
       document.createTextNode("You are looking at the dimmed preview. "),
       el("strong", { text: "The file itself stays bright" }),
       document.createTextNode(", so it will still be blank to anyone without headroom."),
+    ];
+  }
+  if (!hasHeadroom()) {
+    return [
+      el("strong", { text: "No headroom on this screen. " }),
+      document.createTextNode("The card reads blank here, which is the plate working rather than failing. Drag the dimmer to read back what you wrote, and send the file to someone whose screen can show it."),
     ];
   }
   return [
