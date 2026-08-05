@@ -36,7 +36,7 @@
     <div class="arcade-header-actions">
       <button class="chrome-toggle chrome-toggle--flatten" type="button" id="flattenToggle" aria-pressed="false" title="Clamp everything to ordinary white">
         <span class="chrome-toggle-mark" aria-hidden="true"></span>
-        <span>Flatten HDR</span>
+        <span class="label-long">Flatten HDR</span><span class="label-short">Flatten</span>
       </button>
       <a class="chrome-link" href="./arcade.html">Arcade</a>
       <a class="chrome-link" href="./">Studio</a>
@@ -45,28 +45,19 @@
 
   <main class="arcade-main">
     <div class="hub">
-      <div class="hub-intro">
+      <div class="hub-intro hub-intro--tool">
         <p class="hub-eyebrow"><span class="wedge" aria-hidden="true"><i style="--step:.25"></i><i style="--step:.5"></i><i style="--step:.75"></i><i style="--step:1"></i></span> Write in light</p>
         <h1 class="hub-title">Overwhite.</h1>
         <p class="hub-lede">
-          Your message is drawn at <strong class="figure">1,189 nits</strong> on a plate at
-          <strong class="figure">999</strong>. Without headroom a screen renders both as the same
-          white, so the plate comes out <em>blank</em>. With headroom the words are simply there.
-          No key, no software, no decoder.
+          Your words at <strong class="figure">1,189 nits</strong> on a plate at
+          <strong class="figure">999</strong>. <em>Blank</em> on a screen without headroom, simply
+          readable on one with it.
         </p>
       </div>
 
       <section class="consent-gate" id="consentGate" hidden>
-        <h2>Read this first.</h2>
-        <div class="consent-body">
-          <p><strong>This hides nothing from anyone who has the screen for it.</strong></p>
-          <p>
-            Anyone who opens your file on better hardware than yours reads it immediately, and anyone
-            who knows the technique recovers it in seconds with ordinary image tools. It is not
-            encryption and it authenticates nothing.
-          </p>
-          <p>Do not put anything here that would hurt you if it were read aloud.</p>
-        </div>
+        <p class="consent-headline">This hides nothing from anyone who has the screen for it.</p>
+        <p>Not encryption, not private, and no protection at all. The full disclosure is at the foot of this page.</p>
         <button class="arcade-button arcade-button--primary" type="button" id="consentAccept">I understand, let the plate make light</button>
       </section>
 
