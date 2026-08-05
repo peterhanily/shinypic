@@ -1,4 +1,4 @@
-const CACHE_NAME = "shinypic-shell-v6";
+const CACHE_NAME = "shinypic-shell-v8";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -7,6 +7,25 @@ const APP_SHELL = [
   "./hdr-core.js",
   "./demo-catalog.js",
   "./image-guard.js",
+  "./arcade.html",
+  "./arcade.css",
+  "./arcade.js",
+  "./arcade/rng.js",
+  "./arcade/png-icc.js",
+  "./arcade/photometry.js",
+  "./arcade/hdr-image.js",
+  "./arcade/limiter.js",
+  "./arcade/ui.js",
+  "./arcade/foolsgold-board.js",
+  "./arcade/foolsgold.js",
+  "./arcade/lamplighter-code.js",
+  "./arcade/lamplighter.js",
+  "./arcade/ceiling-staircase.js",
+  "./arcade/ceiling.js",
+  "./arcade/keyhole.js",
+  "./arcade/overwhite-code.js",
+  "./overwhite.html",
+  "./overwhite.js",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/icon-192.png",
@@ -39,9 +58,12 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (event.request.mode === "navigate") {
+    // Offline, serve the page that was actually asked for; the studio is only
+    // the fallback for routes that were never cached.
     event.respondWith(
-      fetch(event.request)
-        .catch(() => caches.match("./index.html")),
+      fetch(event.request).catch(async () =>
+        (await caches.match(event.request, { ignoreSearch: true }))
+        || (await caches.match("./index.html"))),
     );
     return;
   }

@@ -725,6 +725,55 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
 .story-link small { color: #5c719e; font-size: 8px; }
 .story-link > span:last-child { font-size: 18px; }
 
+/*
+ * The arcade lives in a dark room, because brighter-than-white cannot be seen
+ * against paper. This card is the only dark surface in the studio on purpose:
+ * it is a window into that room rather than a button that happens to be inverted.
+ */
+.arcade-promo {
+  width: calc(100% - 52px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  margin: 0 26px 24px;
+  padding: 13px 14px;
+  border: 1px solid #23262e;
+  border-radius: 14px;
+  background: #0d0f14;
+  color: #f2ede2;
+  text-align: left;
+  text-decoration: none;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.arcade-promo:hover { border-color: var(--orange); transform: translateY(-1px); }
+.arcade-promo-wedge { display: flex; gap: 2px; align-items: flex-end; }
+.arcade-promo-wedge i {
+  width: 4px;
+  border-radius: 1px;
+  background: rgba(242, 237, 226, .3);
+}
+.arcade-promo-wedge i:nth-child(1) { height: 7px; }
+.arcade-promo-wedge i:nth-child(2) { height: 11px; background: rgba(242, 237, 226, .42); }
+.arcade-promo-wedge i:nth-child(3) { height: 15px; background: rgba(242, 237, 226, .56); }
+.arcade-promo-wedge i:nth-child(4) { height: 19px; background: rgba(242, 237, 226, .72); }
+.arcade-promo-wedge i:nth-child(5) { height: 23px; background: rgba(242, 237, 226, .88); }
+.arcade-promo-wedge i:nth-child(6) { height: 27px; background: var(--orange); }
+.arcade-promo-copy { min-width: 0; display: grid; gap: 3px; }
+.arcade-promo strong { font-size: 12px; letter-spacing: -.01em; }
+.arcade-promo small { color: rgba(242, 237, 226, .58); font-size: 10px; line-height: 1.45; }
+.arcade-promo-go { color: rgba(242, 237, 226, .5); font-size: 16px; }
+.arcade-promo:hover .arcade-promo-go { color: var(--orange); }
+
+.header-link--arcade { border-color: #23262e; background: #0d0f14; color: #f2ede2; }
+.header-link--arcade:hover { border-color: var(--orange); color: var(--orange); }
+.header-wedge { display: flex; gap: 1.5px; align-items: flex-end; }
+.header-wedge i { width: 3px; border-radius: 1px; background: currentColor; }
+.header-wedge i:nth-child(1) { height: 5px; opacity: .4; }
+.header-wedge i:nth-child(2) { height: 8px; opacity: .6; }
+.header-wedge i:nth-child(3) { height: 11px; opacity: .8; }
+.header-wedge i:nth-child(4) { height: 14px; }
+
 .export-dock {
   z-index: 20;
   padding: 14px 22px calc(14px + env(safe-area-inset-bottom));
@@ -845,6 +894,7 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
   .control-section { padding-right: 20px; padding-left: 20px; }
   .truth-card { margin-right: 20px; margin-left: 20px; }
   .story-link { width: calc(100% - 40px); margin-right: 20px; margin-left: 20px; }
+  .arcade-promo { width: calc(100% - 40px); margin-right: 20px; margin-left: 20px; }
   .export-dock { position: sticky; bottom: 0; }
 }
 
@@ -902,6 +952,7 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border: 3px s
   input[type="range"] { height: 28px; }
   .truth-card { margin-right: 16px; margin-bottom: 20px; margin-left: 16px; }
   .story-link { width: calc(100% - 32px); margin: -10px 16px 20px; }
+  .arcade-promo { width: calc(100% - 32px); margin: 0 16px 20px; }
   .export-dock { padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); }
   .export-status { margin-bottom: 5px; }
   .export-status small { display: none; }

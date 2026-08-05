@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08090c">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Three games in which your display is the game piece. Find the real lights among the fakes, read a message written in luminance, and measure where your screen stops.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ShinyPic">
+  <meta property="og:title" content="ShinyPic Arcade">
+  <meta property="og:description" content="Brighter than white, as a game mechanic. Three benches, one dark room.">
+  <meta property="og:url" content="https://shinypic.pages.dev/arcade.html">
+  <meta property="og:image" content="https://shinypic.pages.dev/assets/social-card.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="apple-mobile-web-app-title" content="ShinyPic Arcade">
+  <title>ShinyPic Arcade</title>
+  <link rel="canonical" href="https://shinypic.pages.dev/arcade.html">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="./arcade.css">
+  <script type="module" src="./arcade.js"></script>
+</head>
+<body class="arcade-body">
+  <a class="skip-link" href="#arcadeMain">Skip to the games</a>
+
+  <header class="arcade-header">
+    <a class="arcade-brand" href="./" aria-label="Back to the ShinyPic studio">
+      <span class="arcade-brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 44 44" fill="none">
+          <path d="M22 2.5v8M22 33.5v8M2.5 22h8M33.5 22h8M8.2 8.2l5.6 5.6M30.2 30.2l5.6 5.6M35.8 8.2l-5.6 5.6M13.8 30.2l-5.6 5.6" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
+          <circle cx="22" cy="22" r="8.5" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="arcade-brand-text"><strong>ShinyPic</strong><span>Arcade</span></span>
+    </a>
+
+    <div class="arcade-header-actions">
+      <button class="chrome-toggle" type="button" id="intensityToggle" aria-pressed="false" title="Halve how far emitters rise above white">
+        <span class="chrome-toggle-mark" aria-hidden="true"></span>
+        <span>Reduce intensity</span>
+      </button>
+      <button class="chrome-toggle chrome-toggle--flatten" type="button" id="flattenToggle" aria-pressed="false" title="Clamp everything to ordinary white">
+        <span class="chrome-toggle-mark" aria-hidden="true"></span>
+        <span>Flatten HDR</span>
+      </button>
+      <a class="chrome-link" href="./">Studio</a>
+    </div>
+  </header>
+
+  <main class="arcade-main" id="arcadeMain">
+    <section class="hub" id="hubView">
+      <div class="hub-intro">
+        <p class="hub-eyebrow"><span class="wedge" aria-hidden="true"><i style="--step:.25"></i><i style="--step:.5"></i><i style="--step:.75"></i><i style="--step:1"></i></span> Three benches</p>
+        <h1 class="hub-title">Games your display<br>has to play.</h1>
+        <p class="hub-lede">
+          Ordinary white is not the top of the scale. Given headroom, a pixel can be encoded as a
+          <em>light</em> rather than a lit surface. That difference is something you can be tested
+          on, write a message in, and measure.
+        </p>
+
+        <button class="capability-panel" type="button" id="capabilityPill" aria-describedby="capabilityDetail">
+          <span class="capability-dot" aria-hidden="true"></span>
+          <span class="capability-copy">
+            <strong id="capabilityLabel">Checking this display</strong>
+            <small id="capabilityDetail">Reading the media query and support for dynamic-range-limit.</small>
+          </span>
+        </button>
+      </div>
+
+      <div class="hub-grid" id="hubGrid"></div>
+
+      <a class="sidebench" href="./overwhite.html">
+        <span class="sidebench-mark" aria-hidden="true">
+          <i style="--step:.2"></i><i style="--step:.45"></i><i style="--step:.7"></i><i style="--step:1"></i>
+        </span>
+        <span class="sidebench-copy">
+          <strong>Overwhite</strong>
+          <small>A composer, not a game. Type a short message and it comes out as a Rec.2100 PQ plate: readable on a screen with headroom, blank white without one.</small>
+        </span>
+        <span class="sidebench-go" aria-hidden="true">Compose</span>
+      </a>
+
+      <footer class="hub-foot">
+        <div class="hub-foot-col">
+          <h2>What is happening</h2>
+          <p>
+            Every board is a lossless PNG carrying a real Rec.2100 PQ profile, built in your browser
+            and never uploaded. The profile does the work: it tells a colour-managed renderer that a
+            code value means an absolute luminance. No CSS glow, no animation, no gain map.
+          </p>
+        </div>
+        <div class="hub-foot-col">
+          <h2>The honest limits</h2>
+          <p>
+            Most visitors have no headroom to spend. Firefox renders no HDR still images at all, and
+            many displays report none. Those browsers compress the extra light into the top of the
+            ordinary range rather than discarding it, so the games stay playable but become a hunt
+            through near-identical whites. Nothing here is hidden, private or secure.
+          </p>
+        </div>
+        <div class="hub-foot-col">
+          <h2>Numbers used</h2>
+          <ul class="fact-list">
+            <li><span>Diffuse white</span><span class="figure">203 nits</span></li>
+            <li><span>Rung ladder</span><span class="figure">345 to 650 nits</span></li>
+            <li><span>Lit area cap</span><span class="figure">1% of viewport</span></li>
+            <li><span>Flash limit</span><span class="figure">0.6 Hz max</span></li>
+          </ul>
+        </div>
+      </footer>
+    </section>
+
+    <section class="game-view" id="gameView" hidden>
+      <a class="back-link" id="backToHub" href="#"><span aria-hidden="true">←</span> All benches</a>
+      <div id="gameHost"></div>
+    </section>
+  </main>
+
+  <dialog class="safety-dialog" id="safetyDialog" aria-labelledby="safetyTitle">
+    <span class="wedge wedge--large" aria-hidden="true"><i style="--step:.16"></i><i style="--step:.33"></i><i style="--step:.5"></i><i style="--step:.66"></i><i style="--step:.83"></i><i style="--step:1"></i></span>
+    <h2 id="safetyTitle">This page makes light.</h2>
+    <p>
+      On a display with headroom, small parts of these boards will be brighter than anything else on
+      your screen. That is the point of the games, and worth knowing first.
+    </p>
+    <div class="safety-facts">
+      <p><strong>Small and still.</strong><span>Above-white content is capped at 1% of your viewport. Nothing on a play surface animates.</span></p>
+      <p><strong>Slow and bounded.</strong><span>The one brightness control is limited in code to one change every 1.6 seconds, against the 3 Hz limit in WCAG 2.3.1. Emitters stop at 650 nits.</span></p>
+      <p><strong>Reversible.</strong><span>Reduce intensity and Flatten HDR sit in the header on every screen. Flatten is never gated behind a game.</span></p>
+    </div>
+    <p class="safety-note">
+      Photosensitive epilepsy affects roughly 1 in 4,000 people. No automated checker can verify
+      content like this: WCAG's flash model normalises 1.0 to CSS white and cannot express
+      brighter-than-white at all. The limits above are enforced in code rather than certified by a
+      tool. If bright light bothers you, use Flatten HDR. The games still work.
+    </p>
+    <button class="arcade-button arcade-button--primary" type="button" id="safetyAccept">I understand, open the bench</button>
+  </dialog>
+
+  <div class="arcade-toast" id="arcadeToast" role="status" aria-live="polite" aria-atomic="true">
+    <span class="toast-wedge" aria-hidden="true"></span>
+    <span class="arcade-toast-copy">
+      <strong id="arcadeToastTitle"></strong>
+      <small id="arcadeToastMessage"></small>
+    </span>
+    <button type="button" id="arcadeToastClose" aria-label="Dismiss">×</button>
+  </div>
+</body>
+</html>
