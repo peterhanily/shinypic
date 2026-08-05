@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08090c">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Write a short message in light above ordinary white. Readable on a display with HDR headroom, blank white without one. Not encryption, and not private.">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ShinyPic">
+  <meta property="og:title" content="Overwhite">
+  <meta property="og:description" content="A plate at 999 nits with your words on it at 1,189. Blank without headroom, readable with it.">
+  <meta property="og:url" content="https://shinypic.pages.dev/overwhite.html">
+  <title>Overwhite</title>
+  <link rel="canonical" href="https://shinypic.pages.dev/overwhite.html">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="./arcade.css">
+  <script type="module" src="./overwhite.js"></script>
+</head>
+<body class="arcade-body">
+  <a class="skip-link" href="#composer">Skip to the composer</a>
+
+  <header class="arcade-header">
+    <a class="arcade-brand" href="./arcade.html" aria-label="Back to the ShinyPic Arcade">
+      <span class="arcade-brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 44 44" fill="none">
+          <path d="M22 2.5v8M22 33.5v8M2.5 22h8M33.5 22h8M8.2 8.2l5.6 5.6M30.2 30.2l5.6 5.6M35.8 8.2l-5.6 5.6M13.8 30.2l-5.6 5.6" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
+          <circle cx="22" cy="22" r="8.5" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="arcade-brand-text"><strong>ShinyPic</strong><span>Overwhite</span></span>
+    </a>
+
+    <div class="arcade-header-actions">
+      <button class="chrome-toggle chrome-toggle--flatten" type="button" id="flattenToggle" aria-pressed="false" title="Clamp everything to ordinary white">
+        <span class="chrome-toggle-mark" aria-hidden="true"></span>
+        <span>Flatten HDR</span>
+      </button>
+      <a class="chrome-link" href="./arcade.html">Arcade</a>
+      <a class="chrome-link" href="./">Studio</a>
+    </div>
+  </header>
+
+  <main class="arcade-main">
+    <div class="hub">
+      <div class="hub-intro">
+        <p class="hub-eyebrow"><span class="wedge" aria-hidden="true"><i style="--step:.25"></i><i style="--step:.5"></i><i style="--step:.75"></i><i style="--step:1"></i></span> Write in light</p>
+        <h1 class="hub-title">Overwhite.</h1>
+        <p class="hub-lede">
+          Your message is drawn at <strong class="figure">1,189 nits</strong> on a plate at
+          <strong class="figure">999</strong>. Without headroom a screen renders both as the same
+          white, so the plate comes out <em>blank</em>. With headroom the words are simply there.
+          No key, no software, no decoder.
+        </p>
+      </div>
+
+      <section class="consent-gate" id="consentGate" hidden>
+        <h2>Read this first.</h2>
+        <div class="consent-body">
+          <p><strong>This hides nothing from anyone who has the screen for it.</strong></p>
+          <p>
+            Anyone who opens your file on better hardware than yours reads it immediately, and anyone
+            who knows the technique recovers it in seconds with ordinary image tools. It is not
+            encryption and it authenticates nothing.
+          </p>
+          <p>Do not put anything here that would hurt you if it were read aloud.</p>
+        </div>
+        <button class="arcade-button arcade-button--primary" type="button" id="consentAccept">I understand, let the plate make light</button>
+      </section>
+
+      <section class="composer" id="composer" aria-label="Compose a plate">
+        <div class="composer-controls">
+          <label class="composer-field">
+            <span class="composer-label">Message <em id="messageCounter" class="figure">0/90</em></span>
+            <textarea id="messageInput" rows="3" spellcheck="false" autocomplete="off"
+              placeholder="MEET AT THE HARBOUR LIGHT">THE PLATE IS NOT BLANK</textarea>
+          </label>
+
+          <label class="composer-field">
+            <span class="composer-label">Preview exposure <em id="exposureValue" class="figure">true plate</em></span>
+            <input id="exposureRange" type="range" min="0" max="35" value="0" step="1">
+            <small>A viewing aid for screens without headroom. Dim the preview until the message appears. The exported file never changes.</small>
+          </label>
+
+          <button class="arcade-button arcade-button--primary download-button" type="button" id="downloadPlate">
+            <span>Download plate</span>
+            <small id="downloadMeta">PNG · Rec.2100 PQ</small>
+          </button>
+        </div>
+
+        <div class="composer-preview">
+          <div class="plate-stage" id="plateStage">
+            <img class="plate-image" id="plateImage" alt="The plate. On a display with headroom it carries your message; without one it is a blank white rectangle." draggable="false">
+          </div>
+          <div class="rung-meters" id="plateReadout"></div>
+          <p class="plate-status" id="plateStatus" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <footer class="hub-foot">
+        <div class="hub-foot-col">
+          <h2>How to read one</h2>
+          <p>
+            Open the PNG on a display with HDR headroom, in Safari 26+ or Chrome 136+. The words are
+            just there. Nothing to install, nothing to decode. On any other screen it is a white
+            rectangle, and the exposure slider is how you read one anyway.
+          </p>
+        </div>
+        <div class="hub-foot-col">
+          <h2>What it is not</h2>
+          <div id="disclosureBody" class="disclosure-body"></div>
+        </div>
+        <div class="hub-foot-col">
+          <h2>The whole format</h2>
+          <ul class="fact-list">
+            <li><span>Plate</span><span class="figure">999 nits</span></li>
+            <li><span>Message</span><span class="figure">1,189 nits</span></li>
+            <li><span>Contrast</span><span class="figure">+18.9%</span></li>
+            <li><span>Carrier</span><span class="figure">PNG · Rec.2100 PQ</span></li>
+            <li><span>Capacity</span><span class="figure">90 chars</span></li>
+          </ul>
+          <p>
+            That is the entire specification, published on purpose. A technique whose security
+            depends on nobody knowing it does not have any.
+          </p>
+        </div>
+      </footer>
+    </div>
+  </main>
+</body>
+</html>

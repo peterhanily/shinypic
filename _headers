@@ -17,10 +17,22 @@
 /manifest.webmanifest
   Cache-Control: no-cache
 
+/arcade.html
+  Cache-Control: no-cache
+
+/overwhite.html
+  Cache-Control: no-cache
+
 /*.js
   Cache-Control: no-cache
 
+/arcade/*
+  Cache-Control: no-cache
+
 /styles.css
+  Cache-Control: no-cache
+
+/arcade.css
   Cache-Control: no-cache
 
 /assets/rec2100-pq.icc

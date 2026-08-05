@@ -98,6 +98,19 @@ export function pqEncodeNits(nits) {
   ) ** PQ_M2;
 }
 
+/** Decode a PQ signal value back to absolute luminance in nits (inverse of pqEncodeNits). */
+export function pqDecodeSignal(signal) {
+  assertFiniteNumber(signal, 'signal');
+  const clamped = Math.min(Math.max(signal, 0), 1);
+  const powered = clamped ** (1 / PQ_M2);
+  const numerator = Math.max(powered - PQ_C1, 0);
+  const denominator = PQ_C2 - PQ_C3 * powered;
+  if (denominator <= 0) {
+    return PQ_MAX_NITS;
+  }
+  return PQ_MAX_NITS * (numerator / denominator) ** (1 / PQ_M1);
+}
+
 /** Cubic Hermite interpolation from zero to one between the supplied edges. */
 export function smoothstep(edge0, edge1, value) {
   assertFiniteNumber(edge0, 'edge0');

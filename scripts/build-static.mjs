@@ -15,6 +15,25 @@ const FILES = [
   "hdr-core.js",
   "demo-catalog.js",
   "image-guard.js",
+  "arcade.html",
+  "arcade.css",
+  "arcade.js",
+  "arcade/rng.js",
+  "arcade/png-icc.js",
+  "arcade/photometry.js",
+  "arcade/hdr-image.js",
+  "arcade/limiter.js",
+  "arcade/ui.js",
+  "arcade/foolsgold-board.js",
+  "arcade/foolsgold.js",
+  "arcade/lamplighter-code.js",
+  "arcade/lamplighter.js",
+  "arcade/ceiling-staircase.js",
+  "arcade/ceiling.js",
+  "arcade/keyhole.js",
+  "arcade/overwhite-code.js",
+  "overwhite.html",
+  "overwhite.js",
   "manifest.webmanifest",
   "sw.js",
   "_headers",
@@ -34,6 +53,7 @@ await rm(OUTPUT, { recursive: true, force: true });
 await Promise.all([
   mkdir(OUTPUT, { recursive: true }),
   mkdir(path.join(OUTPUT, "assets"), { recursive: true }),
+  mkdir(path.join(OUTPUT, "arcade"), { recursive: true }),
 ]);
 
 await Promise.all(FILES.map(async (relativePath) => {
@@ -43,3 +63,4 @@ await Promise.all(FILES.map(async (relativePath) => {
 }));
 
 console.log(`Static PWA built at ${path.join(OUTPUT, "index.html")}`);
+console.log(`Arcade built at ${path.join(OUTPUT, "arcade.html")}`);
