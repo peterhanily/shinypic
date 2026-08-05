@@ -666,7 +666,15 @@ async function loadSource(url, metadata) {
     candidateImage.onerror = () => reject(new Error("Image decode failed"));
     candidateImage.src = url;
   });
-  await candidateImage.decode?.().catch(() => {});
+  // decode() is an optimisation here: the load event above already guarantees a
+  // usable bitmap. Chrome can leave decode() pending forever on an image it has
+  // already decoded, and a .catch() cannot rescue a promise that never settles,
+  // so this awaited it indefinitely and the editor stalled on "Reading photo"
+  // with no preview, no export and no service worker. Race it and move on.
+  await Promise.race([
+    candidateImage.decode?.().catch(() => {}),
+    new Promise((resolve) => setTimeout(resolve, 300)),
+  ]);
   validateImageDimensions(candidateImage.naturalWidth, candidateImage.naturalHeight);
   if (sequence !== sourceLoadSequence) return false;
   sourceImage = candidateImage;
