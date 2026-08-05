@@ -25,6 +25,17 @@ export const MAX_LINES = 4;
 export const PLATE_NITS = 999;
 export const INK_NITS = 1189;
 
+/**
+ * How much brighter the message is than the card, as a display string.
+ *
+ * Derived rather than written down, because the page states this figure in four
+ * places and a stale copy of it is worse than none: the whole point of the panel
+ * is that the numbers are checkable.
+ */
+export function inkContrastLabel() {
+  return `+${((INK_NITS / PLATE_NITS - 1) * 100).toFixed(1)}%`;
+}
+
 /** The plain-language statement shipped on the page, verbatim. */
 export const DISCLOSURE = Object.freeze({
   headline: "This hides nothing from anyone who has the screen for it.",

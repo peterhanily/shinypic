@@ -51,6 +51,7 @@ import {
 import { KEYHOLE_GLYPH_NITS, KEYHOLE_PEDESTAL_NITS, keyholeDigit } from "../arcade/keyhole.js";
 import {
   INK_NITS,
+  inkContrastLabel,
   MAX_LINES,
   MAX_MESSAGE_CHARS,
   PLATE_NITS,
@@ -627,4 +628,20 @@ test("Overwhite's exposure aid moves the plate down without touching the file", 
   assert.ok(exposedNits(INK_NITS, 3.5) < BASE_WHITE_NITS);
   // The contrast ratio survives the shift, so the message stays as legible.
   assert.ok(Math.abs(exposedNits(INK_NITS, 2) / exposedNits(PLATE_NITS, 2) - INK_NITS / PLATE_NITS) < 1e-9);
+});
+
+test("Overwhite's quoted contrast is derived, not transcribed", () => {
+  // The page states this figure in four places. It used to be typed into each of
+  // them, so any change to the constants would have left the numbers panel
+  // describing a file that no longer existed.
+  assert.equal(inkContrastLabel(), `+${((INK_NITS / PLATE_NITS - 1) * 100).toFixed(1)}%`);
+  assert.match(inkContrastLabel(), /^\+\d+\.\d%$/);
+});
+
+test("Overwhite's card reaches the clip point and its ink clears it", () => {
+  // Below the clip point the card stops being blank on an ordinary screen and
+  // the message leaks out as grey-on-grey to everyone.
+  const clipCode = 192;
+  assert.ok(nitsToCode(PLATE_NITS) >= clipCode, "card must reach the clip point");
+  assert.ok(nitsToCode(INK_NITS) > nitsToCode(PLATE_NITS), "ink must encode above the card");
 });
