@@ -168,6 +168,7 @@ ul { padding: 0; list-style: none; }
   transition: border-color .15s ease, color .15s ease;
 }
 .chrome-link:hover { border-color: var(--ink); color: var(--ink); }
+@media (max-width: 560px) { .chrome-link--out { display: none; } }
 
 @media (max-width: 720px) {
   .arcade-header { gap: 10px; padding: 0 14px; }
@@ -860,3 +861,76 @@ ul { padding: 0; list-style: none; }
 .composer-preview .rung-meters { justify-content: center; }
 .disclosure-body { display: grid; gap: 8px; }
 .disclosure-body p { color: var(--ink-soft); font-size: 12px; line-height: 1.65; }
+
+/* ------------------------------------------------------------------ site nav */
+/* The same three sections on every page, so you always know where you are and
+   what else exists. The current page is stated, not merely highlighted. */
+.site-nav {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 253, 248, .72);
+}
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 9px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .15s ease, color .15s ease;
+}
+.site-nav a:hover { background: rgba(23, 32, 51, .06); color: var(--ink); }
+.site-nav a.is-current { background: var(--ink); color: white; }
+.site-nav a.is-current:hover { background: var(--ink); }
+
+@media (max-width: 900px) {
+  .site-nav a { padding: 0 9px; font-size: 11px; }
+}
+@media (max-width: 560px) {
+  .site-nav { padding: 2px; border-radius: 10px; }
+  .site-nav a { min-height: 28px; padding: 0 7px; font-size: 10px; border-radius: 8px; }
+}
+
+/*
+ * Same trade on a phone: the section nav keeps its width, the word-mark and the
+ * outbound link give theirs up. The brightness controls stay, because they are
+ * safety controls.
+ */
+@media (max-width: 820px) {
+  .chrome-link--out { display: none; }
+  .arcade-brand-text span { display: none; }
+}
+@media (max-width: 560px) {
+  .arcade-brand-text strong { display: none; }
+  .arcade-header { padding: 0 10px; gap: 8px; }
+}
+
+/* The arcade carries two safety controls as well as the nav. At the narrowest
+   supported width everything tightens rather than anything disappearing. */
+@media (max-width: 400px) {
+  .site-nav { padding: 2px; gap: 1px; }
+  .site-nav a { padding: 0 6px; font-size: 10px; }
+  .chrome-toggle { padding: 0 7px; gap: 5px; font-size: 10px; }
+  .chrome-toggle-mark { width: 8px; height: 8px; }
+  .arcade-header-actions { gap: 4px; }
+}
+
+/* At 320 the brand, the nav and two safety controls genuinely do not fit on one
+   line. The nav wraps to its own row rather than anything shrinking illegibly. */
+@media (max-width: 359px) {
+  .arcade-header { flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; row-gap: 8px; }
+  .site-nav { order: 3; width: 100%; justify-content: center; }
+}
+
+/* The header's outbound link hides on a phone, so every destination is also
+   listed in the footer where width is not scarce. */
+.hub-foot-col--links .fact-list li { justify-content: flex-start; }
+.hub-foot-col--links a { color: var(--blue); font-weight: 700; text-decoration: none; }
+.hub-foot-col--links a:hover { text-decoration: underline; text-underline-offset: 2px; }
