@@ -1,10 +1,16 @@
 /**
  * Overwhite: write a message in light above ordinary white.
  *
- * A plate at 999 nits with the message on it at 1,189 nits. On a display with
- * headroom you read it; on one without, it is a blank white rectangle.
- * The exposure slider is a viewing aid for the second case. It dims the preview
- * until the message clears the clip point, and never touches the exported file.
+ * A lit card on a dark frame. The card sits at the lowest code that saturates an
+ * ordinary screen and the message sits well above it, so with headroom you read
+ * it and without, the card is blank.
+ *
+ * The card covers under a fifth of the frame on purpose. See overwhite-code.js:
+ * a full-bleed card pins the panel at its full-field limit and the message
+ * clips away with it, whatever luminance the ink asks for.
+ *
+ * The exposure slider is a viewing aid for the headroom-less case. It dims the
+ * preview until the message clears the clip point, and never touches the file.
  */
 
 import { base64ToBytes } from "./hdr-core.js";
@@ -24,6 +30,9 @@ import {
   MAX_LINES,
   MAX_MESSAGE_CHARS,
   PLATE_NITS,
+  SURROUND_NITS,
+  FRAME_ASPECT,
+  cardRect,
   chooseWrapWidth,
   exposedNits,
   inkContrastLabel,
@@ -218,24 +227,41 @@ function scheduleRender() {
   renderTimer = setTimeout(render, 120);
 }
 
-/** Draw the message onto a light field at a given plate luminance. */
-function paintPlate(lines, plateNits, inkNits, width, height) {
-  const field = createLightField(width, height, 3);
-  paintRect(field, { x: 0, y: 0, width, height, nits: plateNits });
+/**
+ * Draw a lit card, carrying the message, onto a dark frame.
+ *
+ * The message is rasterised at card size and composited at the card's origin
+ * rather than drawn across the whole frame. paintMask floors coverage at the
+ * card's luminance, so a single stray glyph pixel outside the card would burn a
+ * 1,010-nit mark onto a 15-nit surround and be visible to everyone, headroom or
+ * not. Rasterising into a card-sized buffer makes that impossible by
+ * construction instead of relying on the text happening to fit.
+ */
+function paintPlate(lines, plateNits, inkNits, surroundNits, frame, card) {
+  const field = createLightField(frame.width, frame.height, surroundNits);
+  paintRect(field, { x: card.x, y: card.y, width: card.width, height: card.height, nits: plateNits });
   if (!lines.length) return field;
 
-  const mask = rasterizeText(width, height, (context) => {
-    const lineHeight = height / (lines.length + 0.9);
+  const cardMask = rasterizeText(card.width, card.height, (context) => {
+    const lineHeight = card.height / (lines.length + 0.9);
     const size = Math.round(lineHeight * 0.74);
     context.font = `700 ${size}px ui-monospace, "SF Mono", Menlo, Consolas, monospace`;
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.letterSpacing = `${Math.max(1, Math.round(size * 0.08))}px`;
-    const top = (height - lineHeight * (lines.length - 1)) / 2;
+    const top = (card.height - lineHeight * (lines.length - 1)) / 2;
     lines.forEach((line, index) => {
-      context.fillText(line, width / 2, top + lineHeight * index);
+      context.fillText(line, card.width / 2, top + lineHeight * index);
     });
   });
+
+  const mask = new Uint8Array(frame.width * frame.height);
+  for (let row = 0; row < card.height; row += 1) {
+    mask.set(
+      cardMask.subarray(row * card.width, (row + 1) * card.width),
+      (card.y + row) * frame.width + card.x,
+    );
+  }
   paintMask(field, mask, { nits: inkNits, floorNits: plateNits });
   return field;
 }
@@ -255,19 +281,28 @@ async function render() {
   const stops = exposureStops();
   const plateNits = exposedNits(PLATE_NITS, stops);
   const inkNits = exposedNits(INK_NITS, stops);
+  const surroundNits = exposedNits(SURROUND_NITS, stops);
 
-  // The plate never flashes and never animates, so the flash-area rule does not
-  // bind it. Held to a twentieth of the viewport regardless, well inside
-  // BT.1702-2's quarter-of-frame area clause.
-  const { width, height } = fitToAreaBudget(viewportPixels() * 0.05, aspect, {
-    minWidth: 260,
-    maxWidth: 760,
+  // The card never flashes and never animates, so the flash-area rule does not
+  // bind it. The budget below is on the frame, of which CARD_AREA_FRACTION is
+  // lit, so the lit area lands near a fiftieth of the viewport: less than half
+  // what the full-bleed card used, and far inside BT.1702-2's quarter-of-frame
+  // area clause.
+  const { width, height } = fitToAreaBudget(viewportPixels() * 0.12, FRAME_ASPECT, {
+    minWidth: 280,
+    maxWidth: 860,
   });
   elements.stage.style.setProperty("--plate-width", `${width}px`);
-  elements.stage.style.setProperty("--plate-aspect", String(aspect));
+  elements.stage.style.setProperty("--plate-aspect", String(FRAME_ASPECT));
 
   if (!state.profile) return;
-  await showLightField(elements.plate, paintPlate(lines, plateNits, inkNits, width, height), state.profile);
+  const frame = { width, height };
+  const card = cardRect(width, height, aspect);
+  await showLightField(
+    elements.plate,
+    paintPlate(lines, plateNits, inkNits, surroundNits, frame, card),
+    state.profile,
+  );
   if (token !== state.renderToken) return;
 
   elements.readout.replaceChildren(
@@ -278,7 +313,7 @@ async function render() {
   );
   elements.status.textContent = stops > 0
     ? `The preview is dimmed by ${stops.toFixed(1)} stops so it can be read without headroom. The saved file is always the bright one.`
-    : "This is the real thing. On a screen with no headroom it is a blank white card.";
+    : "This is the real thing. On a screen with no headroom the card reads blank.";
 
   elements.whoReads.innerHTML = "";
   elements.whoReads.append(...whoCanRead(lines.length, stops));
@@ -317,7 +352,7 @@ function whoCanRead(lineCount, stops) {
   }
   return [
     el("strong", { text: "HDR screens read it. " }),
-    document.createTextNode("Recent iPhones, MacBook Pro displays and HDR monitors show the words. Every other screen shows a blank white card."),
+    document.createTextNode("Recent iPhones, MacBook Pro displays and HDR monitors show the words. Every other screen shows a blank card."),
   ];
 }
 
@@ -325,7 +360,7 @@ function whoCanRead(lineCount, stops) {
 async function copyCaption() {
   const caption = [
     "There is a message in this picture.",
-    "If you see a blank white card, it needs an HDR screen to show up.",
+    "If the card looks blank, it needs an HDR screen to show up.",
     "Made with ShinyPic Overwhite: https://shinypic.pages.dev/overwhite",
   ].join("\n");
   try {
@@ -373,9 +408,13 @@ async function downloadPlate() {
 
   try {
     const { lines, aspect } = layout(normalizeMessage(elements.message.value));
-    const height = Math.max(160, Math.round(EXPORT_WIDTH / aspect));
+    // The frame is a fixed shape, so the exported file's outline is the same for
+    // every message. The old export took its aspect ratio from the text, which
+    // handed a viewer with no headroom the line count and longest line.
+    const height = Math.round(EXPORT_WIDTH / FRAME_ASPECT);
+    const frame = { width: EXPORT_WIDTH, height };
     const blob = await fieldToHdrPng(
-      paintPlate(lines, PLATE_NITS, INK_NITS, EXPORT_WIDTH, height),
+      paintPlate(lines, PLATE_NITS, INK_NITS, SURROUND_NITS, frame, cardRect(EXPORT_WIDTH, height, aspect)),
       state.profile,
     );
 
