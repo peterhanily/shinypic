@@ -1,10 +1,24 @@
 /**
- * Overwhite: message layout for a plate written above diffuse white.
+ * Overwhite: message layout for a card written above diffuse white.
  *
- * The message is drawn as ordinary text at 1,189 nits on a 999-nit plate, the
- * same 18.9% contrast used everywhere else here. Measured through the browser's
- * own colour conversion, both land on sRGB 255 without headroom, so the plate is
- * verifiably blank on a screen that has none and readable on one that does.
+ * The card sits at the lowest PQ code that saturates an ordinary screen and the
+ * message sits well above it. Converting a full 256-code PQ ramp through
+ * ColorSync shows exactly one usable collapse band: codes 192 to 255 all render
+ * as sRGB 255, spanning 1,010 to 10,000 nits. Every other band that collapses
+ * lives below 3 nits and spans less than 1.1x, so it cannot hold a message.
+ * That band is the entire mechanism, and it fixes the card at code 192.
+ *
+ * The card does NOT fill the frame, and that is load-bearing rather than
+ * decorative. A panel renders min(requested, peak). A full-frame 1,010-nit card
+ * sits at a display's sustained full-field limit, so card and message clip to
+ * the same delivered luminance and the message disappears at any ink value:
+ *
+ *   panel peak   ink 1,209   ink 1,930
+ *      1,000       1.00x       1.00x     <- what shipped, on real hardware
+ *      1,600       1.20x       1.58x
+ *
+ * Shrinking the lit area raises the peak the panel will grant, which is what
+ * gives a brighter ink anywhere to go. Neither lever works alone.
  *
  * There is no bit-packing, no error correction and no machine decoder, because
  * the decoder is an eye. That removes the one thing that would make this a covert
@@ -17,13 +31,52 @@
  * hardware. See DISCLOSURE.
  */
 
+import { codeToNits } from "./photometry.js";
+
 /** Long enough for a note, short enough that this is obviously a toy. */
 export const MAX_MESSAGE_CHARS = 90;
 export const MAX_LINES = 4;
 
+/**
+ * The lowest PQ code that reaches sRGB 255. Below it the card stops being blank
+ * on an ordinary screen and the message leaks out as grey on grey.
+ */
+export const CLIP_CODE = 192;
+
 /** Measured to render identically on a screen without headroom. */
-export const PLATE_NITS = 999;
-export const INK_NITS = 1189;
+export const PLATE_NITS = codeToNits(CLIP_CODE);
+export const INK_NITS = codeToNits(210);
+
+/**
+ * The field the card sits on. Well under the clip point, so it reads as a dark
+ * border rather than part of the card, and identical for every message, so it
+ * discloses nothing about what was written.
+ */
+export const SURROUND_NITS = 15;
+
+/** Frame shape and how much of it is allowed to be lit. */
+export const FRAME_ASPECT = 16 / 9;
+export const CARD_AREA_FRACTION = 0.18;
+
+/**
+ * Where the card sits inside the frame, in whole pixels.
+ *
+ * Integer edges matter: the message is rasterised into the card and composited
+ * at this offset, so a fractional origin would let an antialiased glyph edge
+ * land on the dark surround, where anything at or above the clip point is
+ * plainly visible to everyone.
+ */
+export function cardRect(frameWidth, frameHeight, cardAspect) {
+  const area = frameWidth * frameHeight * CARD_AREA_FRACTION;
+  const width = Math.min(Math.round(Math.sqrt(area * cardAspect)), frameWidth);
+  const height = Math.min(Math.round(width / cardAspect), frameHeight);
+  return {
+    x: Math.round((frameWidth - width) / 2),
+    y: Math.round((frameHeight - height) / 2),
+    width,
+    height,
+  };
+}
 
 /**
  * How much brighter the message is than the card, as a display string.
@@ -40,7 +93,7 @@ export function inkContrastLabel() {
 export const DISCLOSURE = Object.freeze({
   headline: "This hides nothing from anyone who has the screen for it.",
   body: [
-    "Overwhite writes your message in light above ordinary white. On a display with headroom it is simply readable: no key, no software, no trick. Without headroom it renders as a blank white rectangle, because that screen cannot show anything above white.",
+    "Overwhite writes your message in light above ordinary white. On a display with headroom it is simply readable: no key, no software, no trick. Without headroom the card renders blank, because that screen cannot show anything above white.",
     "That is the whole mechanism. It is not encryption, it is not authentication, and it protects the message from nobody. Anyone who opens the file on an HDR screen reads it, and anyone who knows the technique recovers it in seconds with ordinary image tools.",
     "Do not put anything in here that would hurt you if it were read aloud. If you need a message to be private, encrypt it with a real tool.",
   ],

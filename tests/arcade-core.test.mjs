@@ -50,7 +50,11 @@ import {
 } from "../arcade/ceiling-staircase.js";
 import { KEYHOLE_GLYPH_NITS, KEYHOLE_PEDESTAL_NITS, keyholeDigit } from "../arcade/keyhole.js";
 import {
+  CLIP_CODE,
+  FRAME_ASPECT,
   INK_NITS,
+  SURROUND_NITS,
+  cardRect,
   inkContrastLabel,
   MAX_LINES,
   MAX_MESSAGE_CHARS,
@@ -58,6 +62,7 @@ import {
   chooseWrapWidth,
   exposedNits,
   normalizeMessage,
+  plateAspect,
   wrapLines,
 } from "../arcade/overwhite-code.js";
 import { DIFFICULTY_TIERS } from "../arcade/foolsgold-board.js";
@@ -641,7 +646,51 @@ test("Overwhite's quoted contrast is derived, not transcribed", () => {
 test("Overwhite's card reaches the clip point and its ink clears it", () => {
   // Below the clip point the card stops being blank on an ordinary screen and
   // the message leaks out as grey-on-grey to everyone.
-  const clipCode = 192;
-  assert.ok(nitsToCode(PLATE_NITS) >= clipCode, "card must reach the clip point");
-  assert.ok(nitsToCode(INK_NITS) > nitsToCode(PLATE_NITS), "ink must encode above the card");
+  assert.equal(nitsToCode(PLATE_NITS), CLIP_CODE, "card sits exactly on the clip point");
+  assert.ok(nitsToCode(INK_NITS) > CLIP_CODE, "ink must encode above the clip point");
+
+  // Both inside the measured collapse band, so an ordinary screen renders the
+  // card as one flat white whatever it says.
+  assert.ok(nitsToCode(INK_NITS) <= 255);
+});
+
+test("Overwhite's surround stays well below the clip point", () => {
+  // The surround is meant to be visibly dark. What matters is that it is nowhere
+  // near the band the message lives in, so it can never be mistaken for ink.
+  assert.ok(nitsToCode(SURROUND_NITS) < CLIP_CODE - 40, "surround must read as a dark border");
+  assert.ok(SURROUND_NITS < BASE_WHITE_NITS, "surround must sit under diffuse white");
+});
+
+test("Overwhite's card is a minority of the frame at every message shape", () => {
+  // This is the fix, not a style choice. A full-bleed card at the clip point
+  // pins a panel at its full-field limit and the message clips away with it.
+  for (const aspect of [1.2, 2.0, 3.2, 4.5, 8.0]) {
+    const frame = { width: 1280, height: Math.round(1280 / FRAME_ASPECT) };
+    const card = cardRect(frame.width, frame.height, aspect);
+
+    const fraction = (card.width * card.height) / (frame.width * frame.height);
+    assert.ok(fraction <= 0.20, `aspect ${aspect}: lit ${(fraction * 100).toFixed(1)}% of frame`);
+
+    // The card must sit wholly inside the frame, or the message rasterised into
+    // it would be composited off the edge of the light field.
+    assert.ok(card.x >= 0 && card.y >= 0, `aspect ${aspect}: card origin inside frame`);
+    assert.ok(card.x + card.width <= frame.width, `aspect ${aspect}: card fits horizontally`);
+    assert.ok(card.y + card.height <= frame.height, `aspect ${aspect}: card fits vertically`);
+
+    // Whole pixels, so an antialiased glyph edge cannot land on the surround.
+    for (const value of [card.x, card.y, card.width, card.height]) {
+      assert.equal(value, Math.round(value), `aspect ${aspect}: integer geometry`);
+    }
+  }
+});
+
+test("Overwhite's exported frame shape does not depend on the message", () => {
+  // The old export took its aspect from the text, which handed a viewer with no
+  // headroom the line count and the longest line.
+  const height = Math.round(1280 / FRAME_ASPECT);
+  const short = cardRect(1280, height, plateAspect(8, 1));
+  const long = cardRect(1280, height, plateAspect(22, 4));
+  assert.notDeepEqual(short, long, "the card still adapts to the message");
+  // ...but the frame it sits in does not.
+  assert.equal(Math.round(1280 / FRAME_ASPECT), height);
 });
