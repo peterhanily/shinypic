@@ -844,7 +844,19 @@ ul { padding: 0; list-style: none; }
 .download-button small { font-size: 10px; font-weight: 600; opacity: .82; }
 
 .composer-preview { display: grid; gap: 12px; justify-items: center; }
-.composer-preview .plate-stage { width: 100%; }
+/* The plate carries its own dark surround now, so the stage must not add a
+   second one. A padded near-black box with rounded corners made the preview a
+   picture of the file rather than the file: extra border, wrong corners. The
+   clamped state keeps its dashed outline, since that is a real state and not
+   part of the artefact. */
+.composer-preview .plate-stage {
+  width: 100%;
+  padding: 0;
+  border-color: transparent;
+  background: none;
+}
+.composer-preview .plate-stage.is-clamped { border-color: var(--stage-line); }
+.composer-preview .plate-image { border-radius: 0; }
 .plate-stage.is-clamped { border-style: dashed; }
 
 .who-reads {
